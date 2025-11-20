@@ -1,0 +1,44 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env
+.env
+.env.*.local
+
+# Build
+dist/
+build/
+coverage/
+
+# Logs
+logs/
+*.log
+logs/*.log
+
+# System
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+
+# Nest CLI cache
+.nestcli.json
+
+# Typescript
+*.tsbuildinfo
+
+# Test outputs
+coverage/
+.jest/
+
+# Lockfiles (if you prefer npm only)
+package-lock.json
