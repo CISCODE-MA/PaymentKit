@@ -39,6 +39,3 @@ Thumbs.db
 # Test outputs
 coverage/
 .jest/
-
-# Lockfiles (if you prefer npm only)
-package-lock.json
