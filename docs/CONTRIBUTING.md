@@ -1,4 +1,4 @@
-# Contributing to @vlpha/paymentkit
+# Contributing to @ciscode/paymentkit
 
 This document describes the basic workflow and commit conventions for this repo.
 

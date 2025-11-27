@@ -1,4 +1,4 @@
-# @vlpha/PaymentKit
+# @ciscode/PaymentKit
 
 Unified payment package for NestJs with a single API over Stripe, Paypal and Adyen. 
 
@@ -9,7 +9,7 @@ Early development - EPIC 1 (Setup  & Architecture)
 ## Installation  
 
 ```bash 
-npm install @vlpha/PaymentKit
+npm install @ciscode/PaymentKit
 ``` 
 
 ## Usage 

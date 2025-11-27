@@ -1,5 +1,5 @@
 {
-  "name": "@vlpha/paymentkit",
+  "name": "@ciscode/paymentkit",
   "version": "0.0.0-development",
   "description": "Unified payments package for NestJS (Stripe, PayPal, Adyen).",
   "author": "Zaiid Moumni",
