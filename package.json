@@ -75,7 +75,8 @@
     },
     "moduleNameMapper": {
       "^@config/(.*)$": "<rootDir>/src/config/$1",
-      "^@common/(.*)$": "<rootDir>/src/common/$1"
+      "^@common/(.*)$": "<rootDir>/src/common/$1",
+      "^@src/(.*)$": "<rootDir>/src/$1"
     },
     "collectCoverageFrom": [
       "src/**/*.(t|j)s"
