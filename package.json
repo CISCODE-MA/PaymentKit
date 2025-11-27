@@ -1,6 +1,6 @@
 {
   "name": "@vlpha/paymentkit",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "Unified payments package for NestJS (Stripe, PayPal, Adyen).",
   "author": "Zaiid Moumni",
   "private": true,
@@ -13,13 +13,14 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint '{src,test}/**/*.{ts,tsx}' --max-warnings=0",
+    "lint": "eslint '{src,test}/**/*.{ts,tsx}'",
     "lint:fix": "eslint '{src,test}/**/*.{ts,tsx}' --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "release": "npx semantic-release@25"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -27,6 +28,10 @@
     "@nestjs/platform-express": "^11.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -55,20 +60,27 @@
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
+    "rootDir": ".",
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/test/**/*.spec.ts"
+    ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "moduleNameMapper": {
+      "^@config/(.*)$": "<rootDir>/src/config/$1",
+      "^@common/(.*)$": "<rootDir>/src/common/$1",
+      "^@src/(.*)$": "<rootDir>/src/$1"
+    },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "src/**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "coverage"
   }
 }

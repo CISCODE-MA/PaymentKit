@@ -1,0 +1,1 @@
+export const PAYMENTKIT_CONFIG = Symbol('PAYMENTKIT_CONFIG');
