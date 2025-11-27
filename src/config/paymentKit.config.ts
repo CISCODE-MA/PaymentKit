@@ -1,5 +1,3 @@
-// src/config/paymentkit.config.ts
-
 export type PaymentKitEnvironment = 'sandbox' | 'production';
 
 export interface PaymentKitGatewayToggleConfig {

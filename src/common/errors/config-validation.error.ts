@@ -1,4 +1,8 @@
-import type { ConfigValidationIssue } from '@config/paymentKit.config';
+import {
+  validatePaymentKitPublicConfig,
+  type ConfigValidationIssue,
+  type PaymentKitPublicConfig,
+} from '../../config/paymentKit.config';
 
 export class ConfigValidationError extends Error {
   readonly issues: ConfigValidationIssue[];
@@ -13,6 +17,7 @@ export class ConfigValidationError extends Error {
     if (!issues.length) {
       return 'Configuration validation failed with unknown error';
     }
+
     return issues
       .map((issue) => (issue.path ? `${issue.path}: ${issue.message}` : issue.message))
       .join('; ');
@@ -20,21 +25,14 @@ export class ConfigValidationError extends Error {
 }
 
 /**
- * Helper that throws if validation fails and returns a normalized config if ok.
- * This will be used later by the ConfigLoader / Modules
+ * Fail-fast helper used by the config loader / module.
  */
-
-export function parsePaymentKitPublicConfig(raw: unknown) {
-  // Lazy import to avoid circular deps in further implementations
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-
-  const { validatePaymentKitPublicConfig } =
-    require('@config/paymentKit.config') as typeof import('@config/paymentKit.config');
-
+export function parsePaymentKitPublicConfig(raw: unknown): PaymentKitPublicConfig {
   const result = validatePaymentKitPublicConfig(raw);
+
   if (!result.valid) {
     throw new ConfigValidationError(result.issues);
   }
 
-  return raw as import('@config/paymentKit.config').PaymentKitPublicConfig;
+  return raw as PaymentKitPublicConfig;
 }
