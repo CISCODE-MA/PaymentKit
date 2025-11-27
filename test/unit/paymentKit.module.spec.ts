@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { PaymentKitModule } from '@src/paymentKit.module';
 import { PAYMENTKIT_CONFIG } from '@common/constants';
+import type { PaymentKitResolvedConfig } from '@config/paymentKit.config-loader';
 
 describe('PaymentKitModule.register', () => {
   const ORIGINAL_ENV = { ...process.env };
@@ -12,7 +13,6 @@ describe('PaymentKitModule.register', () => {
   });
 
   afterEach(() => {
-    // Restore original env to avoid leaking between tests
     process.env = { ...ORIGINAL_ENV };
   });
 
@@ -31,12 +31,12 @@ describe('PaymentKitModule.register', () => {
       ],
     }).compile();
 
-    const resolved = moduleRef.get<any>(PAYMENTKIT_CONFIG);
+    const resolved = moduleRef.get<PaymentKitResolvedConfig>(PAYMENTKIT_CONFIG);
 
     expect(resolved).toBeDefined();
     expect(resolved.environment).toBe('sandbox');
     expect(resolved.defaultCurrency).toBe('USD');
     expect(resolved.gateways.stripe).toBeDefined();
-    expect(resolved.gateways.stripe.apiKey).toBe('sk_test_from_spec');
+    expect(resolved.gateways.stripe?.apiKey).toBe('sk_test_from_spec');
   });
 });
