@@ -1,6 +1,6 @@
-import type { PaymentKitPublicConfig } from './paymentKit.config';
-import { PaymentKitConfigLoader } from './paymentKit.config-loader';
-import { ConfigValidationError } from '../common/errors/config-validation.error';
+import type { PaymentKitPublicConfig } from '@config/paymentKit.config';
+import { PaymentKitConfigLoader } from '@config/paymentKit.config-loader';
+import { ConfigValidationError } from '@common/errors/config-validation.error';
 
 describe('PaymentKitConfigLoader', () => {
   const baseConfig: PaymentKitPublicConfig = {

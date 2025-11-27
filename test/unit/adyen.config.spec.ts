@@ -1,4 +1,4 @@
-import { buildAdyenInternalConfig, type EnvSource } from './adyen.config';
+import { buildAdyenInternalConfig, type EnvSource } from '@config/gateways/adyen.config';
 
 describe('Adyen gateway internal config builder', () => {
   const makeEnv = (overrides: EnvSource = {}): EnvSource => ({

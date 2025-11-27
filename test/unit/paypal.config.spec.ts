@@ -1,4 +1,4 @@
-import { buildPaypalInternalConfig, type EnvSource } from './paypal.config';
+import { buildPaypalInternalConfig, type EnvSource } from '@config/gateways/paypal.config';
 
 describe('PayPal gateway internal config builder', () => {
   const makeEnv = (overrides: EnvSource = {}): EnvSource => ({

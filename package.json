@@ -60,20 +60,26 @@
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
+    "rootDir": ".",
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/test/**/*.spec.ts"
+    ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "moduleNameMapper": {
+      "^@config/(.*)$": "<rootDir>/src/config/$1",
+      "^@common/(.*)$": "<rootDir>/src/common/$1"
+    },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "src/**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "coverage"
   }
 }

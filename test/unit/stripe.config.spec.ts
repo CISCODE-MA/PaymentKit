@@ -1,4 +1,4 @@
-import { buildStripeInternalConfig, type EnvSource } from './stripe.config';
+import { buildStripeInternalConfig, type EnvSource } from '@config/gateways/stripe.config';
 
 describe(' Stripe gateway internal config builder', () => {
   const makeEnv = (overrides: EnvSource = {}): EnvSource => ({
