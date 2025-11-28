@@ -50,7 +50,7 @@ describe('DefaultErrorNormalizer', () => {
     const error = new Error('Something broke');
 
     const normalized = normalizer.normalize(error, {
-      gateway: 'stripe' as any, // type hack just to simulate but gateway type is strict
+      gateway: 'stripe',
     });
 
     expect(normalized.code).not.toBeUndefined();
