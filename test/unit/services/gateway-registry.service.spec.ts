@@ -14,23 +14,26 @@ import { PaymentStatus } from '@src/core/entities/payment-status.enum';
 class FakeGateway implements PaymentGateway {
   constructor(public readonly key: GatewayKey) {}
 
-  async createPayment(_command: CreatePaymentCommand): Promise<CreatePaymentResult> {
-    return {
+  createPayment(_command: CreatePaymentCommand): Promise<CreatePaymentResult> {
+    void _command; // mark as used for eslint
+    return Promise.resolve({
       payment: null,
-    };
+    });
   }
 
-  async getPaymentStatus(_query: GetPaymentStatusQuery): Promise<GetPaymentStatusResult> {
-    return {
+  getPaymentStatus(_query: GetPaymentStatusQuery): Promise<GetPaymentStatusResult> {
+    void _query;
+    return Promise.resolve({
       status: PaymentStatus.Pending,
       payment: null,
-    };
+    });
   }
 
-  async refundPayment(_command: RefundPaymentCommand): Promise<RefundPaymentResult> {
-    return {
+  refundPayment(_command: RefundPaymentCommand): Promise<RefundPaymentResult> {
+    void _command;
+    return Promise.resolve({
       refund: null,
-    };
+    });
   }
 }
 
