@@ -1,9 +1,9 @@
 import { GatewayKey } from '@src/common/types/gateway.types';
-import { Money } from '../value-objects/money.value-object';
-import { Payment } from '../entities/payment.entity';
+import { Money } from '@src/core/value-objects/money.value-object';
+import { Payment } from '@src/core/entities/payment.entity';
 import { NormalizedError } from '@src/common/errors/normalized-error.model';
-import { PaymentStatus } from '../entities/payment-status.enum';
-import { Refund } from '../entities/refund.entity';
+import { PaymentStatus } from '@src/core/entities/payment-status.enum';
+import { Refund } from '@src/core/entities/refund.entity';
 
 /**
  * Imput for creating a payment through a gateway
@@ -88,5 +88,4 @@ export interface PaymentGateway {
   createPayment(command: CreatePaymentCommand): Promise<CreatePaymentResult>;
   getPaymentStatus(command: GetPaymentStatusQuery): Promise<GetPaymentStatusResult>;
   refundPayment(command: RefundPaymentCommand): Promise<RefundPaymentResult>;
-  f;
 }
