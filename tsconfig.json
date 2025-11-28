@@ -40,6 +40,9 @@
       ],
       "@config/*": [
         "src/config/*"
+      ],
+      "@domain/*": [
+        "src/domain/*"
       ]
     }
   },
