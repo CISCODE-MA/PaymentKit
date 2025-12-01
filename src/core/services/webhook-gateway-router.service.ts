@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { GatewayKey } from '@src/common/types/gateway.types';
-import { WebhookEvent } from '@src/common/types/webhook.types';
+import type { WebhookEvent } from '@src/common/types/webhook.types';
+import {
+  InMemoryWebhookEventDispatcher,
+  type WebhookEventDispatcher,
+} from '@src/core/services/webhook-event-dispatcher.service';
 
 export interface IncomingWebhookContext {
   body: unknown;
   headers: Record<string, string | string[]>;
 }
+
 /**
  * Contract for gateway-specific webhook handlers.
  * (StripeWebhookHandler, PayPalWebhookHandler, etc)
@@ -16,17 +21,20 @@ export interface IncomingWebhookContext {
  */
 export interface GatewayWebhookHandler {
   readonly key: GatewayKey;
-  handleWebhook(context: IncomingWebhookContext): Promise<void>;
+  handleWebhook(context: IncomingWebhookContext): Promise<WebhookEvent[] | void>;
 }
 
 /**
  * Simple in-memory router: maps a GatewayKey to its webhook handler.
  * Handlers will be registered in later epics.
  */
-
 @Injectable()
 export class WebhookGatewayRouter {
   private readonly handlers = new Map<GatewayKey, GatewayWebhookHandler>();
+
+  constructor(
+    private readonly dispatcher: WebhookEventDispatcher = new InMemoryWebhookEventDispatcher(),
+  ) {}
 
   registerHandler(handler: GatewayWebhookHandler): void {
     this.handlers.set(handler.key, handler);
@@ -36,7 +44,7 @@ export class WebhookGatewayRouter {
     gateway: GatewayKey;
     body: unknown;
     headers: Record<string, string | string[]>;
-  }): Promise<WebhookEvent[] | void> {
+  }): Promise<void> {
     const handler = this.handlers.get(input.gateway);
 
     if (!handler) {
@@ -49,8 +57,13 @@ export class WebhookGatewayRouter {
       headers: input.headers,
     });
 
-    // Ticket 299 stops here: router just returns the normalized events.
-    // Ticket 301 will plug the dispatcher in and emit them.
-    return events;
+    if (!events || !Array.isArray(events) || events.length === 0) {
+      return;
+    }
+
+    // Emit each normalized event through the dispatcher
+    for (const event of events) {
+      await this.dispatcher.emit(event);
+    }
   }
 }
