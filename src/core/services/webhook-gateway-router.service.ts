@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GatewayKey } from '@src/common/types/gateway.types';
+import { WebhookEvent } from '@src/common/types/webhook.types';
 
 export interface IncomingWebhookContext {
   body: unknown;
@@ -22,6 +23,7 @@ export interface GatewayWebhookHandler {
  * Simple in-memory router: maps a GatewayKey to its webhook handler.
  * Handlers will be registered in later epics.
  */
+
 @Injectable()
 export class WebhookGatewayRouter {
   private readonly handlers = new Map<GatewayKey, GatewayWebhookHandler>();
@@ -47,6 +49,8 @@ export class WebhookGatewayRouter {
       headers: input.headers,
     });
 
+    // Ticket 299 stops here: router just returns the normalized events.
+    // Ticket 301 will plug the dispatcher in and emit them.
     return events;
   }
 }
