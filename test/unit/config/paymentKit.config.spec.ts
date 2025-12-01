@@ -64,6 +64,7 @@ describe('PaymentKit global configuration', () => {
     const codes = result.issues.map((i) => i.code);
     expect(codes).toContain('GATEWAYS_NOT_OBJECT');
   });
+
   it('validates gateway enabled flag as boolean', () => {
     const bad = {
       ...validConfig,
@@ -79,6 +80,52 @@ describe('PaymentKit global configuration', () => {
     const issue = result.issues.find((i) => i.path === 'gateways.stripe.enabled');
     expect(issue).toBeDefined();
     expect(issue?.code).toBe('GATEWAY_ENABLED_INVALID');
+  });
+
+  it('validates webhooks.mode when provided', () => {
+    const withInternal: PaymentKitPublicConfig = {
+      ...validConfig,
+      webhooks: { mode: 'internal' },
+    };
+
+    const internalResult = validatePaymentKitPublicConfig(withInternal);
+    expect(internalResult.valid).toBe(true);
+
+    const withManual: PaymentKitPublicConfig = {
+      ...validConfig,
+      webhooks: { mode: 'manual' },
+    };
+
+    const manualResult = validatePaymentKitPublicConfig(withManual);
+    expect(manualResult.valid).toBe(true);
+  });
+
+  it('rejects invalid webhooks.mode values', () => {
+    const bad: unknown = {
+      ...validConfig,
+      webhooks: { mode: 'invalid-mode' },
+    };
+
+    const result = validatePaymentKitPublicConfig(bad);
+
+    expect(result.valid).toBe(false);
+    const issue = result.issues.find((i) => i.path === 'webhooks.mode');
+    expect(issue).toBeDefined();
+    expect(issue?.code).toBe('WEBHOOKS_MODE_INVALID');
+  });
+
+  it('rejects non-object webhooks', () => {
+    const bad: unknown = {
+      ...validConfig,
+      webhooks: 'manual',
+    };
+
+    const result = validatePaymentKitPublicConfig(bad);
+
+    expect(result.valid).toBe(false);
+    const issue = result.issues.find((i) => i.path === 'webhooks');
+    expect(issue).toBeDefined();
+    expect(issue?.code).toBe('WEBHOOKS_NOT_OBJECT');
   });
 
   it('throws ConfigValidationError via parsePaymentKitPublicConfig on invalid config', () => {

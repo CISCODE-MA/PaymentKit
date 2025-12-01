@@ -1,3 +1,5 @@
+import { WebhookMode } from '@src/common/types/webhook.types';
+
 export type PaymentKitEnvironment = 'sandbox' | 'production';
 
 export interface PaymentKitGatewayToggleConfig {
@@ -10,6 +12,15 @@ export interface PaymentKitGatewaysConfig {
   adyen?: PaymentKitGatewayToggleConfig;
 }
 
+export interface PaymentKitWebhookConfig {
+  /**
+   * Webhook processing mode.
+   * - "internal": PaymentKit processes webhooks internally.
+   * - "manual":  PaymentKit emits normalized events, the host app acts.
+   */
+  mode: WebhookMode;
+}
+
 /**
  * Public config passed by the user to PaymentKitModule.register(...)
  */
@@ -17,6 +28,7 @@ export interface PaymentKitPublicConfig {
   environment: PaymentKitEnvironment;
   defaultCurrency: string;
   gateways: PaymentKitGatewaysConfig;
+  webhooks?: PaymentKitWebhookConfig;
 }
 
 export interface ConfigValidationIssue {
@@ -125,6 +137,29 @@ export function validatePaymentKitPublicConfig(raw: unknown): ConfigValidationRe
         message: 'enabled must be a boolean',
         code: 'GATEWAY_ENABLED_INVALID',
       });
+    }
+  }
+
+  // webhooks (optional)
+  const rawWebhooks = obj.webhooks;
+  if (rawWebhooks !== undefined) {
+    if (typeof rawWebhooks !== 'object' || rawWebhooks === null) {
+      issues.push({
+        path: 'webhooks',
+        message: 'webhooks must be an object if provided',
+        code: 'WEBHOOKS_NOT_OBJECT',
+      });
+    } else {
+      const webhooksObj = rawWebhooks as Record<string, unknown>;
+      const mode = webhooksObj.mode;
+
+      if (mode !== 'internal' && mode !== 'manual') {
+        issues.push({
+          path: 'webhooks.mode',
+          message: 'webhooks.mode must be either "internal" or "manual"',
+          code: 'WEBHOOKS_MODE_INVALID',
+        });
+      }
     }
   }
 

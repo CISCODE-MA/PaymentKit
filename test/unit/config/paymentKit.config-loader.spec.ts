@@ -38,6 +38,9 @@ describe('PaymentKitConfigLoader', () => {
     // disabled gateways should not be present
     expect(resolved.gateways.paypal).toBeUndefined();
     expect(resolved.gateways.adyen).toBeUndefined();
+
+    // default webhook mode should be "internal"
+    expect(resolved.webhooks.mode).toBe('internal');
   });
 
   it('supports enabling multiple gateways at once', () => {
@@ -60,6 +63,21 @@ describe('PaymentKitConfigLoader', () => {
 
     expect(resolved.gateways.paypal?.clientId).toBe('paypal_client');
     expect(resolved.gateways.adyen?.merchantAccount).toBe('adyen_merchant');
+  });
+
+  it('respects explicit webhooks.mode when provided', () => {
+    const config: PaymentKitPublicConfig = {
+      ...baseConfig,
+      webhooks: {
+        mode: 'manual',
+      },
+    };
+
+    const env = makeEnv();
+
+    const resolved = PaymentKitConfigLoader.loadFromEnv(config, env);
+
+    expect(resolved.webhooks.mode).toBe('manual');
   });
 
   it('throws ConfigValidationError when global config is invalid', () => {
@@ -129,5 +147,8 @@ describe('PaymentKitConfigLoader', () => {
     expect(resolved.gateways.stripe).toBeUndefined();
     expect(resolved.gateways.paypal).toBeUndefined();
     expect(resolved.gateways.adyen).toBeUndefined();
+
+    // Still should have default webhooks.mode
+    expect(resolved.webhooks.mode).toBe('internal');
   });
 });
