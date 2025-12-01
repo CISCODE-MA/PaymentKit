@@ -30,7 +30,7 @@ export type WebhookEventType =
  * Payload will usually be a domain snapshot (Payment, Refund, etc.).
  */
 export interface WebhookEvent<TPayload = unknown> {
-  type: WebhookEventType | string;
+  type: WebhookEventType | (string & {});
   gateway: GatewayKey;
   payload: TPayload;
   occurredAt: Date;
