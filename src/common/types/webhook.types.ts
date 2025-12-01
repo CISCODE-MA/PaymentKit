@@ -12,12 +12,25 @@ export type WebhookMode = 'internal' | 'manual';
  * Default mode when none is provided in user configuration.
  */
 export const DEFAULT_WEBHOOK_MODE: WebhookMode = 'internal';
+
+/**
+ * Canonical normalized webhook event types used inside PaymentKit.
+ * These are gateway-agnostic semantic events.
+ */
+export type WebhookEventType =
+  | 'payment.created'
+  | 'payment.succeeded'
+  | 'payment.failed'
+  | 'payment.refunded'
+  | 'refund.created'
+  | 'refund.failed';
+
 /**
  * Normalized webhook event emitted inside PaymentKit.
  * Payload will usually be a domain snapshot (Payment, Refund, etc.).
  */
 export interface WebhookEvent<TPayload = unknown> {
-  type: string;
+  type: WebhookEventType | string;
   gateway: GatewayKey;
   payload: TPayload;
   occurredAt: Date;
