@@ -8,6 +8,10 @@ export interface IncomingWebhookContext {
 /**
  * Contract for gateway-specific webhook handlers.
  * (StripeWebhookHandler, PayPalWebhookHandler, etc)
+ *
+ * Each handler is responsible for:
+ * - interpreting the raw provider webhook payload
+ * - normalizing it to one or more WebhookEvent objects
  */
 export interface GatewayWebhookHandler {
   readonly key: GatewayKey;
@@ -30,7 +34,7 @@ export class WebhookGatewayRouter {
     gateway: GatewayKey;
     body: unknown;
     headers: Record<string, string | string[]>;
-  }): Promise<void> {
+  }): Promise<WebhookEvent[] | void> {
     const handler = this.handlers.get(input.gateway);
 
     if (!handler) {
@@ -38,9 +42,11 @@ export class WebhookGatewayRouter {
       return;
     }
 
-    await handler.handleWebhook({
+    const events = await handler.handleWebhook({
       body: input.body,
       headers: input.headers,
     });
+
+    return events;
   }
 }
