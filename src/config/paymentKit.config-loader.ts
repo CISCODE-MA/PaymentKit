@@ -25,6 +25,7 @@ import {
   type AdyenInternalConfig,
   type EnvSource as AdyenEnvSource,
 } from './gateways/adyen.config';
+import type { WebhookMode } from '../common/types/webhook.types';
 
 export interface PaymentKitResolvedGateways {
   stripe?: StripeInternalConfig;
@@ -32,10 +33,15 @@ export interface PaymentKitResolvedGateways {
   adyen?: AdyenInternalConfig;
 }
 
+export interface PaymentKitResolvedWebhooks {
+  mode: WebhookMode;
+}
+
 export interface PaymentKitResolvedConfig {
   environment: PaymentKitEnvironment;
   defaultCurrency: string;
   gateways: PaymentKitResolvedGateways;
+  webhooks: PaymentKitResolvedWebhooks;
 }
 
 type GenericEnv = Record<string, string | undefined>;
@@ -55,7 +61,7 @@ export class PaymentKitConfigLoader {
     // 1) Validate high-level config (environment, defaultCurrency, gateways shape)
     const validConfig = parsePaymentKitPublicConfig(rawConfig);
 
-    const { environment, defaultCurrency, gateways } = validConfig;
+    const { environment, defaultCurrency, gateways, webhooks } = validConfig;
 
     const issues: ConfigValidationIssue[] = [];
     const resolvedGateways: PaymentKitResolvedGateways = {};
@@ -95,10 +101,16 @@ export class PaymentKitConfigLoader {
       throw new ConfigValidationError(issues);
     }
 
+    // 6) Resolve webhook mode (default to "internal" if not provided)
+    const webhookMode: WebhookMode = webhooks?.mode ?? 'internal';
+
     return {
       environment,
       defaultCurrency,
       gateways: resolvedGateways,
+      webhooks: {
+        mode: webhookMode,
+      },
     };
   }
 }
