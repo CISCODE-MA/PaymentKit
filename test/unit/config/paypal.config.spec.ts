@@ -4,6 +4,7 @@ describe('PayPal gateway internal config builder', () => {
   const makeEnv = (overrides: EnvSource = {}): EnvSource => ({
     PAYMENTKIT_PAYPAL_CLIENT_ID: 'paypal_client_default',
     PAYMENTKIT_PAYPAL_CLIENT_SECRET: 'paypal_secret_default',
+    PAYMENTKIT_PAYPAL_WEBHOOK_ID: 'paypal_webhook_default',
     ...overrides,
   });
 
@@ -82,5 +83,30 @@ describe('PayPal gateway internal config builder', () => {
     expect(result.issues).toHaveLength(1);
     const [issue] = result.issues;
     expect(issue.code).toBe('PAYPAL_CLIENT_ID_REQUIRED');
+  });
+  it('maps webhookId when provided', () => {
+    const env = makeEnv({
+      PAYMENTKIT_PAYPAL_CLIENT_ID: 'client_123',
+      PAYMENTKIT_PAYPAL_CLIENT_SECRET: 'secret_456',
+      PAYMENTKIT_PAYPAL_WEBHOOK_ID: '  webhook_789  ',
+    });
+
+    const result = buildPaypalInternalConfig(true, env);
+
+    expect(result.issues).toHaveLength(0);
+    expect(result.config?.webhookId).toBe('webhook_789');
+  });
+
+  it('omits webhookId when not provided', () => {
+    const env: EnvSource = {
+      PAYMENTKIT_PAYPAL_CLIENT_ID: 'client_123',
+      PAYMENTKIT_PAYPAL_CLIENT_SECRET: 'secret_456',
+      // no PAYMENTKIT_PAYPAL_WEBHOOK_ID
+    };
+
+    const result = buildPaypalInternalConfig(true, env);
+
+    expect(result.issues).toHaveLength(0);
+    expect(result.config?.webhookId).toBeUndefined();
   });
 });
