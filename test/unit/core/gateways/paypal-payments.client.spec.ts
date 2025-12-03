@@ -1,5 +1,6 @@
 // test/unit/core/gateways/paypal-payments.client.spec.ts
 import {
+  GetPaypalPaymentStatusInput,
   PaypalPaymentsClient,
   type CreatePaypalPaymentInput,
   type RefundPaypalPaymentInput,
@@ -204,5 +205,87 @@ describe('PaypalPaymentsClient', () => {
 
     expect(refundCall).toBeDefined();
     expect(refundCall?.headers['PayPal-Request-Id']).toBe('idem-refund');
+  });
+  it('gets payment status successfully', async () => {
+    const fakeHttp = new FakeHttpClient();
+
+    // OAuth token
+    fakeHttp.responses.push({
+      status: 200,
+      body: {
+        access_token: 'token_123',
+        expires_in: 3600,
+      },
+      headers: {},
+    });
+
+    // Order status response
+    fakeHttp.responses.push({
+      status: 200,
+      body: {
+        id: 'ORDER-1',
+        status: 'COMPLETED',
+      },
+      headers: {},
+    });
+
+    const paypalClient = makeClient(fakeHttp);
+    const paymentsClient = new PaypalPaymentsClient(paypalClient);
+
+    const input: GetPaypalPaymentStatusInput = {
+      orderId: 'ORDER-1',
+    };
+
+    const result = await paymentsClient.getPaymentStatus(input);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error('Expected success result');
+
+    expect(result.orderId).toBe('ORDER-1');
+    expect(result.status).toBe('COMPLETED');
+
+    const statusCall = fakeHttp.requests.find((r) => r.url.endsWith('/v2/checkout/orders/ORDER-1'));
+    expect(statusCall).toBeDefined();
+    expect(statusCall?.method).toBe('GET');
+  });
+
+  it('returns normalized error when getPaymentStatus fails', async () => {
+    const fakeHttp = new FakeHttpClient();
+
+    // OAuth token
+    fakeHttp.responses.push({
+      status: 200,
+      body: {
+        access_token: 'token_123',
+        expires_in: 3600,
+      },
+      headers: {},
+    });
+
+    // Status lookup failure
+    fakeHttp.responses.push({
+      status: 404,
+      body: {
+        name: 'RESOURCE_NOT_FOUND',
+        message: 'Order not found',
+      },
+      headers: {},
+    });
+
+    const paypalClient = makeClient(fakeHttp);
+    const paymentsClient = new PaypalPaymentsClient(paypalClient);
+
+    const input: GetPaypalPaymentStatusInput = {
+      orderId: 'UNKNOWN',
+    };
+
+    const result = await paymentsClient.getPaymentStatus(input);
+
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error('Expected failure result');
+
+    // 404 is mapped to InvalidRequest by our PayPal error mapper
+    expect(result.error.code).toBe(NormalizedErrorCode.InvalidRequest);
+    expect(result.error.httpStatus).toBe(404);
   });
 });
