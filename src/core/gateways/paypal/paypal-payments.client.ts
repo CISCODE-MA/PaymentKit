@@ -54,6 +54,30 @@ export interface RefundPaypalPaymentFailure {
 
 export type RefundPaypalPaymentResult = RefundPaypalPaymentSuccess | RefundPaypalPaymentFailure;
 
+/**
+ * Internal representation of PayPal order status.
+ * For now we just pass the raw string through.
+ */
+export interface GetPaypalPaymentStatusInput {
+  orderId: string;
+}
+
+export interface GetPaypalPaymentStatusSuccess {
+  ok: true;
+  orderId: string;
+  status: string;
+  raw: unknown;
+}
+
+export interface GetPaypalPaymentStatusFailure {
+  ok: false;
+  error: NormalizedError;
+}
+
+export type GetPaypalPaymentStatusResult =
+  | GetPaypalPaymentStatusSuccess
+  | GetPaypalPaymentStatusFailure;
+
 interface PaypalOrderResponse {
   id?: string;
   status?: string;
@@ -193,6 +217,51 @@ export class PaypalPaymentsClient {
       return {
         ok: true,
         refundId,
+        status,
+        raw: response.body,
+      };
+    } catch (e) {
+      const error = mapPaypalErrorToNormalizedError({
+        status: 0,
+        body: {
+          name: 'NETWORK_ERROR',
+          message: e instanceof Error ? e.message : 'Unknown network error',
+        },
+      });
+
+      return { ok: false, error };
+    }
+  }
+
+  /**
+   * Fetch current status of an order by id.
+   * This is intentionally low-level; mapping to PaymentStatus
+   * will be done in the PaypalGateway layer.
+   */
+  async getPaymentStatus(
+    input: GetPaypalPaymentStatusInput,
+  ): Promise<GetPaypalPaymentStatusResult> {
+    try {
+      const response = await this.client.requestJson<PaypalOrderResponse>({
+        method: 'GET',
+        path: `/v2/checkout/orders/${encodeURIComponent(input.orderId)}`,
+      });
+
+      if (response.status < 200 || response.status >= 300) {
+        const error = mapPaypalErrorToNormalizedError({
+          status: response.status,
+          body: response.body as PaypalErrorLike,
+        });
+
+        return { ok: false, error };
+      }
+
+      const orderId = response.body.id ?? input.orderId;
+      const status = response.body.status ?? 'UNKNOWN';
+
+      return {
+        ok: true,
+        orderId,
         status,
         raw: response.body,
       };
