@@ -160,7 +160,6 @@ export class PaypalGateway implements PaymentGateway {
       // We type-assert here because we don't know the full Refund shape yet.
       id: result.refundId,
       gateway: this.key,
-      // @ts-expect-error: gatewayRefundId may not exist on Refund; this is a best-effort mapping.
       gatewayRefundId: result.refundId,
       paymentId: command.paymentId,
       amount:
