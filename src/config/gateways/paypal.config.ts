@@ -3,6 +3,11 @@ import type { ConfigValidationIssue } from '@config/paymentKit.config';
 export interface PaypalInternalConfig {
   clientId: string;
   clientSecret: string;
+  /**
+   * Optional PayPal Webhook ID used to verify incoming webhooks.
+   * Not required for basic payment operations.
+   */
+  webhookId?: string;
 }
 
 /**
@@ -22,6 +27,7 @@ export interface PaypalConfigBuildResult {
  * - If `enabled` is true:
  *   - requires PAYMENTKIT_PAYPAL_CLIENT_ID
  *   - requires PAYMENTKIT_PAYPAL_CLIENT_SECRET
+ *   - optionally reads PAYMENTKIT_PAYPAL_WEBHOOK_ID (for webhooks)
  */
 export function buildPaypalInternalConfig(
   enabled: boolean,
@@ -36,6 +42,7 @@ export function buildPaypalInternalConfig(
 
   const rawClientId = env[`${prefix}CLIENT_ID`];
   const rawClientSecret = env[`${prefix}CLIENT_SECRET`];
+  const rawWebhookId = env[`${prefix}WEBHOOK_ID`];
 
   // Validate rawClientId
   if (!rawClientId || rawClientId.trim().length === 0) {
@@ -65,13 +72,14 @@ export function buildPaypalInternalConfig(
     };
   }
 
-  // NOW TS knows both values MUST be strings
   const clientId = rawClientId.trim();
   const clientSecret = rawClientSecret.trim();
+  const webhookId = rawWebhookId?.trim();
 
   const config: PaypalInternalConfig = {
     clientId,
     clientSecret,
+    ...(webhookId && webhookId.length > 0 ? { webhookId } : {}),
   };
 
   return {
