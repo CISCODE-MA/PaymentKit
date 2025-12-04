@@ -77,7 +77,8 @@
       "^@config/(.*)$": "<rootDir>/src/config/$1",
       "^@common/(.*)$": "<rootDir>/src/common/$1",
       "^@src/(.*)$": "<rootDir>/src/$1",
-      "^@gateways/(.*)$": "<rootDir>/src/gateways/$1"
+      "^@gateways/(.*)$": "<rootDir>/src/gateways/$1",
+      "^@core/(.*)$": "<rootDir>/src/core/$1"
     },
     "collectCoverageFrom": [
       "src/**/*.(t|j)s"
