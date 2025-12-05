@@ -27,7 +27,7 @@ describe('verifyStripeWebhook', () => {
       endpointSecret: secret,
     });
 
-    expect(result.valid).toBe(true);
+    expect(result.isValid).toBe(true);
     expect(result.reason).toBeUndefined();
   });
 
@@ -38,7 +38,7 @@ describe('verifyStripeWebhook', () => {
       endpointSecret: secret,
     });
 
-    expect(result.valid).toBe(false);
+    expect(result.isValid).toBe(false);
     expect(result.reason).toBe('SIGNATURE_HEADER_MISSING');
   });
 
@@ -49,7 +49,7 @@ describe('verifyStripeWebhook', () => {
       endpointSecret: secret,
     });
 
-    expect(result.valid).toBe(false);
+    expect(result.isValid).toBe(false);
     expect(result.reason).toBe('SIGNATURE_HEADER_INVALID');
   });
 
@@ -63,7 +63,7 @@ describe('verifyStripeWebhook', () => {
       endpointSecret: secret,
     });
 
-    expect(result.valid).toBe(false);
+    expect(result.isValid).toBe(false);
     expect(result.reason).toBe('SIGNATURE_MISMATCH');
   });
 
@@ -80,7 +80,7 @@ describe('verifyStripeWebhook', () => {
       toleranceSeconds: 300, // 5 minutes
     });
 
-    expect(result.valid).toBe(false);
+    expect(result.isValid).toBe(false);
     expect(result.reason).toBe('TIMESTAMP_OUT_OF_TOLERANCE');
   });
 });
