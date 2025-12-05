@@ -22,7 +22,7 @@ export interface StripeWebhookVerificationInput {
 }
 
 export interface StripeWebhookVerificationResult {
-  valid: boolean;
+  isValid: boolean;
   reason?: string;
 }
 
@@ -86,13 +86,13 @@ export function verifyStripeWebhook(
   const { payload, signatureHeader, endpointSecret, toleranceSeconds } = input;
 
   if (!signatureHeader) {
-    return { valid: false, reason: 'SIGNATURE_HEADER_MISSING' };
+    return { isValid: false, reason: 'SIGNATURE_HEADER_MISSING' };
   }
 
   const parsed = parseStripeSignatureHeader(signatureHeader);
 
   if (!parsed) {
-    return { valid: false, reason: 'SIGNATURE_HEADER_INVALID' };
+    return { isValid: false, reason: 'SIGNATURE_HEADER_INVALID' };
   }
 
   const { timestamp, signatures } = parsed;
@@ -102,12 +102,12 @@ export function verifyStripeWebhook(
     const tsSeconds = Number(timestamp);
 
     if (!Number.isFinite(tsSeconds)) {
-      return { valid: false, reason: 'TIMESTAMP_INVALID' };
+      return { isValid: false, reason: 'TIMESTAMP_INVALID' };
     }
 
     const diff = Math.abs(nowSeconds - tsSeconds);
     if (diff > toleranceSeconds) {
-      return { valid: false, reason: 'TIMESTAMP_OUT_OF_TOLERANCE' };
+      return { isValid: false, reason: 'TIMESTAMP_OUT_OF_TOLERANCE' };
     }
   }
 
@@ -116,8 +116,8 @@ export function verifyStripeWebhook(
   const match = signatures.some((sig) => safeEqual(sig, expected));
 
   if (!match) {
-    return { valid: false, reason: 'SIGNATURE_MISMATCH' };
+    return { isValid: false, reason: 'SIGNATURE_MISMATCH' };
   }
 
-  return { valid: true };
+  return { isValid: true };
 }
