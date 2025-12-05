@@ -25,37 +25,37 @@ class FakeStripePaymentsClient implements StripePaymentsClient {
 
   refundResponses: Array<Awaited<ReturnType<StripePaymentsClient['refundPayment']>>> = [];
 
-  async createPayment(
+  createPayment(
     input: CreateStripePaymentInput,
   ): Promise<Awaited<ReturnType<StripePaymentsClient['createPayment']>>> {
     this.createCalls.push(input);
     const next = this.createResponses.shift();
     if (!next) {
-      throw new Error('No createPayment response mocked');
+      return Promise.reject(new Error('No createPayment response mocked'));
     }
-    return next;
+    return Promise.resolve(next);
   }
 
-  async getPaymentStatus(
+  getPaymentStatus(
     input: GetStripePaymentStatusInput,
   ): Promise<Awaited<ReturnType<StripePaymentsClient['getPaymentStatus']>>> {
     this.statusCalls.push(input);
     const next = this.statusResponses.shift();
     if (!next) {
-      throw new Error('No getPaymentStatus response mocked');
+      return Promise.reject(new Error('No getPaymentStatus response mocked'));
     }
-    return next;
+    return Promise.resolve(next);
   }
 
-  async refundPayment(
+  refundPayment(
     input: RefundStripePaymentInput,
   ): Promise<Awaited<ReturnType<StripePaymentsClient['refundPayment']>>> {
     this.refundCalls.push(input);
     const next = this.refundResponses.shift();
     if (!next) {
-      throw new Error('No refundPayment response mocked');
+      return Promise.reject(new Error('No refundPayment response mocked'));
     }
-    return next;
+    return Promise.resolve(next);
   }
 }
 
