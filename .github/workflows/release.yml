@@ -1,39 +1,38 @@
 name: CD - Release
 
 on:
-    push:
-        branches:
-            - master
-    pull_request:
-        branches:
-            - master
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
 
 jobs:
-    release:
-        name: release
-        runs-on: ubuntu-latest
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0 # required so semantic-release can inspect tags
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org/
 
-            - name: Use Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 22
-                  cache: npm
-                  registry-url: https://registry.npmjs.org/
+      - name: Install dependencies
+        run: npm ci
 
-            - name: Install dependencies
-              run: npm ci
+      - name: Build library
+        run: npm run build
 
-            - name: Build library
-              run: npm run build
-
-            - name: Release
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-              run: npm run release
+      - name: Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release
