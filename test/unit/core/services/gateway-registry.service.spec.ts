@@ -8,7 +8,7 @@ import type {
   PaymentGateway,
 } from '@src/core/ports/payment-gateway.port';
 import type { GatewayKey } from '@common/types/gateway.types';
-import { InMemoryGatewayRegistry } from '@src/core/services/gateway-registy.service';
+import { InMemoryGatewayRegistry } from '@src/core/services/gateway-registry.service';
 import { PaymentStatus } from '@src/core/entities/payment-status.enum';
 
 class FakeGateway implements PaymentGateway {

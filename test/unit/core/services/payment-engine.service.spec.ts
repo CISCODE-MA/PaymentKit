@@ -9,8 +9,8 @@ import {
   type RefundPaymentResult,
   type PaymentGateway,
 } from '@core/ports/payment-gateway.port';
-import { InMemoryGatewayRegistry } from '@src/core/services/gateway-registy.service';
-import type { GatewayRegistry } from '@src/core/services/gateway-registy.service';
+import { InMemoryGatewayRegistry } from '@src/core/services/gateway-registry.service';
+import type { GatewayRegistry } from '@src/core/services/gateway-registry.service';
 import type { ErrorNormalizer } from '@src/core/services/error-normalizer.service';
 import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
 import type { GatewayKey } from '@common/types/gateway.types';
