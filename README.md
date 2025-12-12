@@ -9,7 +9,7 @@ Early development - EPIC 1 (Setup  & Architecture)
 ## Installation  
 
 ```bash 
-npm install @ciscode/PaymentKit
+npm install @ciscode/paymentkit
 ``` 
 
 ## Usage 
