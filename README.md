@@ -4,7 +4,7 @@ Unified payment package for NestJs with a single API over Stripe, Paypal and Ady
 
 ## Status 
 
-Early development - EPIC 1 (Setup  & Architecture) 
+Preparing MVP Release (12/12/2025)
 
 ## Installation  
 
