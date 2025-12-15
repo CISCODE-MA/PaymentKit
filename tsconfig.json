@@ -7,6 +7,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
+    "declarationMap": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -45,7 +46,8 @@
   },
   "include": [
     "src",
-    "test"
+    "test",
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
