@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/CISCODE-MA/PaymentKit/compare/v1.0.1...v1.0.2) (2025-12-16)
+
+
+### Bug Fixes
+
+* #ci, update the lib build script & install devDep to resolve the aliases issues & exporting the proper types for host apps ([6eb22dc](https://github.com/CISCODE-MA/PaymentKit/commit/6eb22dc33f035cb20a2614bd3e9cd84e872c5cfc))
+* #ci, update the lib build script & install devDep to resolve the… ([#18](https://github.com/CISCODE-MA/PaymentKit/issues/18)) ([42051c9](https://github.com/CISCODE-MA/PaymentKit/commit/42051c95c87726b747e1304574dc8e8a8a48931c))
+
 ## [1.0.1](https://github.com/CISCODE-MA/PaymentKit/compare/v1.0.0...v1.0.1) (2025-12-16)
 
 
