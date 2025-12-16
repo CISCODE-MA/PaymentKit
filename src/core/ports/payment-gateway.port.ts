@@ -24,8 +24,14 @@ export interface CreatePaymentCommand {
 /**
  * Result of creating a payment through a gateway.
  */
+
+type NextAction = 
+  | { type : 'redirect'; url: string }
+  | { type : 'client_secret'; url: string }
+  | { type : 'none'; url: string }
 export interface CreatePaymentResult {
   payment: Payment | null;
+  redirectUrl?: NextAction;
   error?: NormalizedError;
 }
 
