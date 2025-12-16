@@ -1,6 +1,6 @@
 {
   "name": "@ciscode/paymentkit",
-  "version": "0.0.0-development",
+  "version": "1.0.2",
   "description": "Unified payments package for NestJS (Stripe, PayPal, Adyen).",
   "author": "Zaiid Moumni",
   "private": false,
