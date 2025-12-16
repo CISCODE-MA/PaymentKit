@@ -27,11 +27,12 @@ export interface CreatePaymentCommand {
 
 export type NextAction =
   | { type: 'redirect'; url: string }
-  | { type: 'client_secret'; url: string }
-  | { type: 'none'; url: string };
+  | { type: 'client_secret'; clientSecret: string }
+  | { type: 'none' };
+
 export interface CreatePaymentResult {
   payment: Payment | null;
-  redirectUrl?: NextAction;
+  nextAction?: NextAction;
   error?: NormalizedError;
 }
 

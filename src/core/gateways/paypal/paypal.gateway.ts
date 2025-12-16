@@ -32,7 +32,7 @@ import {
 export class PaypalGateway implements PaymentGateway {
   readonly key = 'paypal' as const;
 
-  constructor(private readonly paymentsClient: PaypalPaymentsClient) {}
+  constructor(private readonly paymentsClient: PaypalPaymentsClient) { }
 
   async createPayment(command: CreatePaymentCommand): Promise<CreatePaymentResult> {
     if (command.gateway !== this.key) {
@@ -71,7 +71,12 @@ export class PaypalGateway implements PaymentGateway {
       metadata: command.metadata,
     } as Payment;
 
+    const approveUrl = this.extractApproveUrl(result.raw);
+
     return {
+      payment,
+      redirectUrl: approveUrl ? { type: 'redirect', url: approveUrl } : { type: 'none' },
+    }; return {
       payment,
     };
   }
@@ -258,5 +263,19 @@ export class PaypalGateway implements PaymentGateway {
       currency,
       amount: Math.round(numeric * 100),
     };
+  }
+
+  // ------------ HELPER ------------
+  private extractApproveUrl(raw: unknown): string | undefined {
+    if (!raw || typeof raw !== 'object') return undefined;
+
+    const links = (raw as { links?: Array<{ href?: unknown; rel?: unknown }> }).links;
+    if (!Array.isArray(links)) return undefined;
+
+    const approve = links.find(
+      (l) => l?.rel === 'approve' || l?.rel === 'payer-action',
+    );
+
+    return typeof approve?.href === 'string' ? approve.href : undefined;
   }
 }
