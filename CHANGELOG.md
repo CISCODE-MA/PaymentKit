@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/CISCODE-MA/PaymentKit/compare/v1.0.0...v1.0.1) (2025-12-16)
+
+
+### Bug Fixes
+
+* publish pipeline & package metadata ([206bec9](https://github.com/CISCODE-MA/PaymentKit/commit/206bec9200cfe28b86d6687607172a6e876c9cbb))
+* publish pipeline & package metadata ([#17](https://github.com/CISCODE-MA/PaymentKit/issues/17)) ([efac995](https://github.com/CISCODE-MA/PaymentKit/commit/efac995c1b1d22338f6d7a0ba8a15bc6a74c97a5))
+
 # 1.0.0 (2025-12-12)
 
 
