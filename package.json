@@ -23,6 +23,7 @@
     "build": "nest build",
     "build:lib": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "format": "prettier --write \"{src,test}/**/*.{ts,tsx,js,json,md}\"",
+    "format:check": "prettier --check .",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -34,7 +35,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "prepare": "husky"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -48,6 +50,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
@@ -69,8 +73,10 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "jest": "^30.0.0",
-    "prettier": "^3.6.2",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
     "semantic-release": "^25.0.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
@@ -107,5 +113,14 @@
       "src/**/*.(t|j)s"
     ],
     "coverageDirectory": "coverage"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }

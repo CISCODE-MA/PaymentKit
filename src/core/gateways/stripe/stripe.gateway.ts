@@ -78,8 +78,12 @@ export class StripeGateway implements PaymentGateway {
       metadata: command.metadata,
     };
 
+    const clientSecret =
+      typeof result.raw?.client_secret === 'string' ? result.raw.client_secret : undefined;
+
     return {
       payment,
+      nextAction: clientSecret ? { type: 'client_secret', clientSecret } : { type: 'none' },
     };
   }
 
