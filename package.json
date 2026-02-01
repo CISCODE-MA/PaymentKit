@@ -5,6 +5,10 @@
   "author": "Zaiid Moumni",
   "private": false,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CISCODE-MA/PaymentKit"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
