@@ -8,7 +8,6 @@ describe('DefaultWebhookModeService', () => {
     gateways: {
       stripe: undefined,
       paypal: undefined,
-      adyen: undefined,
     },
     webhooks: {
       mode,

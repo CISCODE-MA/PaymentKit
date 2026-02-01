@@ -52,7 +52,7 @@ describe('InMemoryGatewayRegistry', () => {
     const stripe = new FakeGateway('stripe');
     const registry = new InMemoryGatewayRegistry([stripe]);
 
-    expect(registry.get('adyen')).toBeUndefined();
+    expect(registry.get('paypal')).toBeUndefined();
   });
 
   it('list() returns all unique gateways', () => {

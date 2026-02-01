@@ -39,7 +39,7 @@ export class InternalWebhookController {
 
     const value = Array.isArray(raw) ? raw[0] : raw;
 
-    if (value !== 'stripe' && value !== 'paypal' && value !== 'adyen') {
+    if (value !== 'stripe' && value !== 'paypal') {
       return undefined;
     }
 

@@ -25,7 +25,6 @@ describe('PaymentKitModule.register', () => {
           gateways: {
             stripe: { enabled: true },
             paypal: { enabled: false },
-            adyen: { enabled: false },
           },
         }),
       ],

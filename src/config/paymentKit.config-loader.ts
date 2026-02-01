@@ -20,17 +20,11 @@ import {
   type EnvSource as PaypalEnvSource,
 } from './gateways/paypal.config';
 
-import {
-  buildAdyenInternalConfig,
-  type AdyenInternalConfig,
-  type EnvSource as AdyenEnvSource,
-} from './gateways/adyen.config';
 import type { WebhookMode } from '../common/types/webhook.types';
 
 export interface PaymentKitResolvedGateways {
   stripe?: StripeInternalConfig;
   paypal?: PaypalInternalConfig;
-  adyen?: AdyenInternalConfig;
 }
 
 export interface PaymentKitResolvedWebhooks {
@@ -86,17 +80,7 @@ export class PaymentKitConfigLoader {
       resolvedGateways.paypal = paypalResult.config;
     }
 
-    // 4) Adyen
-    const adyenEnabled = gateways.adyen?.enabled === true;
-    const adyenResult = buildAdyenInternalConfig(adyenEnabled, env as AdyenEnvSource);
-    if (adyenResult.issues.length > 0) {
-      issues.push(...adyenResult.issues);
-    }
-    if (adyenResult.config) {
-      resolvedGateways.adyen = adyenResult.config;
-    }
-
-    // 5) Aggregate errors (fail-fast)
+    // 4) Aggregate errors (fail-fast)
     if (issues.length > 0) {
       throw new ConfigValidationError(issues);
     }

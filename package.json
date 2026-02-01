@@ -1,7 +1,7 @@
 {
   "name": "@ciscode/paymentkit",
-  "version": "1.1.0",
-  "description": "Unified payments package for NestJS (Stripe, PayPal, Adyen).",
+  "version": "1.2.0",
+  "description": "Unified payments package for NestJS (Stripe, PayPal).",
   "author": "Zaiid Moumni",
   "private": false,
   "license": "MIT",
@@ -35,6 +35,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:integration": "jest --testPathPattern=integration --runInBand",
     "release": "semantic-release",
     "prepare": "husky"
   },
@@ -99,6 +100,10 @@
     "testMatch": [
       "<rootDir>/test/**/*.spec.ts"
     ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/test/integration/"
+    ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
@@ -112,7 +117,15 @@
     "collectCoverageFrom": [
       "src/**/*.(t|j)s"
     ],
-    "coverageDirectory": "coverage"
+    "coverageDirectory": "coverage",
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

@@ -9,7 +9,6 @@ describe('PaymentKitConfigLoader', () => {
     gateways: {
       stripe: { enabled: true },
       paypal: { enabled: false },
-      adyen: { enabled: false },
     },
   };
 
@@ -18,8 +17,6 @@ describe('PaymentKitConfigLoader', () => {
     PAYMENTKIT_STRIPE_WEBHOOK_SECRET: 'whsec_456',
     PAYMENTKIT_PAYPAL_CLIENT_ID: 'paypal_client',
     PAYMENTKIT_PAYPAL_CLIENT_SECRET: 'paypal_secret',
-    PAYMENTKIT_ADYEN_API_KEY: 'adyen_api',
-    PAYMENTKIT_ADYEN_MERCHANT_ACCOUNT: 'adyen_merchant',
     ...overrides,
   });
 
@@ -37,7 +34,6 @@ describe('PaymentKitConfigLoader', () => {
 
     // disabled gateways should not be present
     expect(resolved.gateways.paypal).toBeUndefined();
-    expect(resolved.gateways.adyen).toBeUndefined();
 
     // default webhook mode should be "internal"
     expect(resolved.webhooks.mode).toBe('internal');
@@ -49,7 +45,6 @@ describe('PaymentKitConfigLoader', () => {
       gateways: {
         stripe: { enabled: true },
         paypal: { enabled: true },
-        adyen: { enabled: true },
       },
     };
 
@@ -59,10 +54,8 @@ describe('PaymentKitConfigLoader', () => {
 
     expect(resolved.gateways.stripe).toBeDefined();
     expect(resolved.gateways.paypal).toBeDefined();
-    expect(resolved.gateways.adyen).toBeDefined();
 
     expect(resolved.gateways.paypal?.clientId).toBe('paypal_client');
-    expect(resolved.gateways.adyen?.merchantAccount).toBe('adyen_merchant');
   });
 
   it('respects explicit webhooks.mode when provided', () => {
@@ -107,7 +100,6 @@ describe('PaymentKitConfigLoader', () => {
       gateways: {
         stripe: { enabled: true },
         paypal: { enabled: true },
-        adyen: { enabled: false },
       },
     };
 
@@ -135,7 +127,6 @@ describe('PaymentKitConfigLoader', () => {
       gateways: {
         stripe: { enabled: false },
         paypal: { enabled: false },
-        adyen: { enabled: false },
       },
     };
 
@@ -146,7 +137,6 @@ describe('PaymentKitConfigLoader', () => {
 
     expect(resolved.gateways.stripe).toBeUndefined();
     expect(resolved.gateways.paypal).toBeUndefined();
-    expect(resolved.gateways.adyen).toBeUndefined();
 
     // Still should have default webhooks.mode
     expect(resolved.webhooks.mode).toBe('internal');

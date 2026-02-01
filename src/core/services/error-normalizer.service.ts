@@ -1,7 +1,6 @@
 import { NormalizedError, NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
 import { GatewayKey } from '@src/common/types/gateway.types';
 import { StripeErrorMapper } from './error-mapping/stripe-error-mapper';
-import { AdyenErrorMapper } from './error-mapping/adyen-error-mapper';
 import { PaypalErrorMapper } from './error-mapping/paypal-error-mapper';
 
 export interface ErrorNormalizer {
@@ -16,8 +15,6 @@ export class DefaultErrorNormalizer implements ErrorNormalizer {
     switch (context.gateway) {
       case 'stripe':
         return StripeErrorMapper.map(error);
-      case 'adyen':
-        return AdyenErrorMapper.map(error);
       case 'paypal':
         return PaypalErrorMapper.map(error);
       default:

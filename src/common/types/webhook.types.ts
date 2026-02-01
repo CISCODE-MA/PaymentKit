@@ -35,7 +35,7 @@ export interface WebhookEvent<TPayload = unknown> {
   payload: TPayload;
   occurredAt: Date;
   /**
-   * Optional raw provider payload (Stripe, PayPal, Adyen event object).
+   * Optional raw provider payload (Stripe, PayPal event object).
    */
   raw?: unknown;
 }

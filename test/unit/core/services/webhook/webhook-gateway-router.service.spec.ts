@@ -79,7 +79,7 @@ describe('WebhookGatewayRouter', () => {
 
     await expect(
       router.route({
-        gateway: 'adyen',
+        gateway: 'stripe',
         body: { test: true },
         headers: {},
       }),

@@ -33,19 +33,6 @@ describe('DefaultErrorNormalizer', () => {
     expect(normalized.code).toBe(NormalizedErrorCode.InvalidRequest);
   });
 
-  it('delegates to Adyen mapper', () => {
-    const error = {
-      errorCode: '14_003',
-      message: 'Refused',
-      status: 402,
-    };
-
-    const normalized = normalizer.normalize(error, { gateway: 'adyen' });
-
-    expect(normalized.gateway).toBe('adyen');
-    expect(normalized.code).toBe(NormalizedErrorCode.CardDeclined);
-  });
-
   it('returns Unknown for unknown gateway keys', () => {
     const error = new Error('Something broke');
 

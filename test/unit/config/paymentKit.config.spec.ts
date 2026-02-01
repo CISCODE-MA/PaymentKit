@@ -14,7 +14,6 @@ describe('PaymentKit global configuration', () => {
     gateways: {
       stripe: { enabled: true },
       paypal: { enabled: false },
-      adyen: { enabled: false },
     },
   };
 

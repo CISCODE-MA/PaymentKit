@@ -9,7 +9,6 @@ export interface PaymentKitGatewayToggleConfig {
 export interface PaymentKitGatewaysConfig {
   stripe?: PaymentKitGatewayToggleConfig;
   paypal?: PaymentKitGatewayToggleConfig;
-  adyen?: PaymentKitGatewayToggleConfig;
 }
 
 export interface PaymentKitWebhookConfig {
@@ -106,7 +105,7 @@ export function validatePaymentKitPublicConfig(raw: unknown): ConfigValidationRe
     gateways = rawGateways as Record<string, unknown>;
   }
 
-  const knownGateways = ['stripe', 'paypal', 'adyen'] as const;
+  const knownGateways = ['stripe', 'paypal'] as const;
 
   for (const key of Object.keys(gateways)) {
     if (!knownGateways.includes(key as (typeof knownGateways)[number])) {
