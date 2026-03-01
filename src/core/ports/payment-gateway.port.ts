@@ -1,9 +1,9 @@
-import { GatewayKey } from '@src/common/types/gateway.types';
-import { Money } from '@src/core/value-objects/money.value-object';
-import { Payment } from '@src/core/entities/payment.entity';
-import { NormalizedError } from '@src/common/errors/normalized-error.model';
-import { PaymentStatus } from '@src/core/entities/payment-status.enum';
-import { Refund } from '@src/core/entities/refund.entity';
+import type { NormalizedError } from '@src/common/errors/normalized-error.model';
+import type { GatewayKey } from '@src/common/types/gateway.types';
+import type { PaymentStatus } from '@src/core/entities/payment-status.enum';
+import type { Payment } from '@src/core/entities/payment.entity';
+import type { Refund } from '@src/core/entities/refund.entity';
+import type { Money } from '@src/core/value-objects/money.value-object';
 
 /**
  * Command to create a payment through a payment gateway.

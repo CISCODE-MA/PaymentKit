@@ -1,4 +1,4 @@
-import { GatewayKey } from './gateway.types';
+import type { GatewayKey } from './gateway.types';
 
 /**
  * Webhook hendling mode for PaymekntKit.

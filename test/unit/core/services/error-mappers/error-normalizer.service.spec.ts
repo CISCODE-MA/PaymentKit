@@ -1,5 +1,5 @@
-import { DefaultErrorNormalizer } from '@src/core/services/error-normalizer.service';
 import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
+import { DefaultErrorNormalizer } from '@src/core/services/error-normalizer.service';
 
 describe('DefaultErrorNormalizer', () => {
   const normalizer = new DefaultErrorNormalizer();

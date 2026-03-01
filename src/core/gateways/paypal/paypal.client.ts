@@ -1,5 +1,5 @@
-import type { PaymentKitEnvironment } from '@config/paymentKit.config';
 import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
+import type { PaymentKitEnvironment } from '@config/paymentKit.config';
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 

@@ -1,7 +1,9 @@
-import { NormalizedError, NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
-import { GatewayKey } from '@src/common/types/gateway.types';
-import { StripeErrorMapper } from './error-mapping/stripe-error-mapper';
+import type { NormalizedError } from '@src/common/errors/normalized-error.model';
+import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import type { GatewayKey } from '@src/common/types/gateway.types';
+
 import { PaypalErrorMapper } from './error-mapping/paypal-error-mapper';
+import { StripeErrorMapper } from './error-mapping/stripe-error-mapper';
 
 export interface ErrorNormalizer {
   normalize(error: unknown, contexxt: { gateway: GatewayKey }): NormalizedError;

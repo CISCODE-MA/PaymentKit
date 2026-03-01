@@ -1,12 +1,12 @@
-import { StripeGateway } from '@src/core/gateways/stripe/stripe.gateway';
+import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import { PaymentStatus } from '@src/core/entities/payment-status.enum';
 import type {
   StripePaymentsClient,
   CreateStripePaymentInput,
   GetStripePaymentStatusInput,
   RefundStripePaymentInput,
 } from '@src/core/gateways/stripe/stripe-payments.client';
-import { PaymentStatus } from '@src/core/entities/payment-status.enum';
-import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import { StripeGateway } from '@src/core/gateways/stripe/stripe.gateway';
 import type {
   CreatePaymentCommand,
   GetPaymentStatusQuery,

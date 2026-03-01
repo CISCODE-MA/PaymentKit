@@ -1,12 +1,13 @@
+import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
 import type { GatewayKey } from '@src/common/types/gateway.types';
+import type { WebhookEvent } from '@src/common/types/webhook.types';
 import type {
   GatewayWebhookHandler,
   IncomingWebhookContext,
 } from '@src/core/services/webhook-gateway-router.service';
-import type { WebhookEvent } from '@src/common/types/webhook.types';
-import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
-import { verifyPaypalWebhook } from './paypal-webhook-verifier';
+
 import { normalizePaypalWebhookEvent } from './paypal-webhook-normalizer';
+import { verifyPaypalWebhook } from './paypal-webhook-verifier';
 
 /**
  * Gateway-specific webhook handler for PayPal.

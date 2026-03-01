@@ -1,4 +1,4 @@
-import { WebhookMode } from '@src/common/types/webhook.types';
+import type { WebhookMode } from '@src/common/types/webhook.types';
 
 export type PaymentKitEnvironment = 'sandbox' | 'production';
 

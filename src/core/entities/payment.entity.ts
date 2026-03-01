@@ -1,6 +1,8 @@
-import { GatewayKey } from '@src/common/types/gateway.types';
-import { Money } from '../value-objects/money.value-object';
-import { PaymentStatus } from './payment-status.enum';
+import type { GatewayKey } from '@src/common/types/gateway.types';
+
+import type { Money } from '../value-objects/money.value-object';
+
+import type { PaymentStatus } from './payment-status.enum';
 
 /**
  * Unified representation of a payment across all gateways.

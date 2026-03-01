@@ -1,7 +1,7 @@
+import type { WebhookEvent } from '@common/types/webhook.types';
+import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
 import { PaypalWebhookHandler } from '@core/gateways/paypal/paypal-webhook.handler';
 import type { IncomingWebhookContext } from '@core/services/webhook-gateway-router.service';
-import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
-import type { WebhookEvent } from '@common/types/webhook.types';
 
 const makeConfig = (overrides: Partial<PaypalInternalConfig> = {}): PaypalInternalConfig => ({
   clientId: 'client_123',

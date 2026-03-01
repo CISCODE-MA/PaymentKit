@@ -3,7 +3,7 @@
  * See: https://developer.paypal.com/docs/api/webhooks/#webhooks_event
  */
 
-import { WebhookEvent, WebhookEventType } from '@src/common/types/webhook.types';
+import type { WebhookEvent, WebhookEventType } from '@src/common/types/webhook.types';
 
 export interface PaypalWebhookEnvelope {
   id?: string;

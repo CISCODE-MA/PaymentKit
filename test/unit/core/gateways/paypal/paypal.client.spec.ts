@@ -1,10 +1,10 @@
+import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
 import {
   PaypalClient,
   type PaypalHttpRequest,
   type PaypalHttpResponse,
   type PaypalHttpClient,
 } from '@src/core/gateways/paypal/paypal.client';
-import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
 
 class FakeHttpClient {
   public readonly requests: PaypalHttpRequest[] = [];

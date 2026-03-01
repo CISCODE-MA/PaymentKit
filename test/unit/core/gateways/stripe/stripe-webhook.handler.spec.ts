@@ -1,7 +1,8 @@
 import { createHmac } from 'crypto';
+
+import type { WebhookEvent } from '@src/common/types/webhook.types';
 import { StripeWebhookHandler } from '@src/core/gateways/stripe/stripe-webhook.handler';
 import type { IncomingWebhookContext } from '@src/core/services/webhook-gateway-router.service';
-import type { WebhookEvent } from '@src/common/types/webhook.types';
 
 const SECRET = 'whsec_test_secret';
 

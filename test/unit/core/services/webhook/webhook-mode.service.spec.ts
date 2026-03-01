@@ -1,5 +1,5 @@
-import { DefaultWebhookModeService } from '@src/core/services/webhook-mode.service';
 import type { PaymentKitResolvedConfig } from '@config/paymentKit.config-loader';
+import { DefaultWebhookModeService } from '@src/core/services/webhook-mode.service';
 
 describe('DefaultWebhookModeService', () => {
   const makeConfig = (mode: 'internal' | 'manual'): PaymentKitResolvedConfig => ({

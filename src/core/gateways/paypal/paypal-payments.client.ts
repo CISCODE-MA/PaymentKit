@@ -1,6 +1,7 @@
-import { PaypalClient } from './paypal.client';
-import { mapPaypalErrorToNormalizedError } from './paypal-error.mapper';
 import type { NormalizedError } from '@src/common/errors/normalized-error.model';
+
+import { mapPaypalErrorToNormalizedError } from './paypal-error.mapper';
+import type { PaypalClient } from './paypal.client';
 
 export interface CreatePaypalPaymentInput {
   amount: {

@@ -1,5 +1,6 @@
-import { NormalizedError, NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
-import { GatewayKey } from '@src/common/types/gateway.types';
+import type { NormalizedError } from '@src/common/errors/normalized-error.model';
+import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import type { GatewayKey } from '@src/common/types/gateway.types';
 
 const STRIPE_GATEWAY_KEY: GatewayKey = 'stripe';
 

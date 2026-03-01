@@ -1,8 +1,8 @@
+import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
 import {
   verifyPaypalWebhook,
   type PaypalWebhookVerificationInput,
 } from '@src/core/gateways/paypal/paypal-webhook-verifier';
-import type { PaypalInternalConfig } from '@config/gateways/paypal.config';
 
 const makeConfig = (overrides: Partial<PaypalInternalConfig> = {}): PaypalInternalConfig => ({
   clientId: 'client_123',

@@ -1,6 +1,7 @@
-import type { Money } from '@core/value-objects/money.value-object';
 import type { GatewayKey } from '@common/types/gateway.types';
-import { PaymentStatus } from './payment-status.enum';
+import type { Money } from '@core/value-objects/money.value-object';
+
+import type { PaymentStatus } from './payment-status.enum';
 
 /**
  * Unified representation of a refund across all gateways.

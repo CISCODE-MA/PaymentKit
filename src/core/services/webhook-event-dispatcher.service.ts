@@ -1,4 +1,4 @@
-import { WebhookEvent, WebhookEventListener } from '@src/common/types/webhook.types';
+import type { WebhookEvent, WebhookEventListener } from '@src/common/types/webhook.types';
 
 /**
  * Dispatcher interface so we can swap implementations later if needed.

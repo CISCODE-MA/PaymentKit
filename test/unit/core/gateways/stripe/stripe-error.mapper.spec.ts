@@ -1,5 +1,5 @@
-import { mapStripeErrorToNormalizedError } from '@src/core/gateways/stripe/stripe-error.mapper';
 import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import { mapStripeErrorToNormalizedError } from '@src/core/gateways/stripe/stripe-error.mapper';
 
 describe('mapStripeErrorToNormalizedError', () => {
   it('maps 400 invalid_request_error to InvalidRequest', () => {

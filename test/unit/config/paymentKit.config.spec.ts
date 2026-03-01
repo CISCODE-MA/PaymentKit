@@ -1,11 +1,11 @@
 import {
-  validatePaymentKitPublicConfig,
-  type PaymentKitPublicConfig,
-} from '@config/paymentKit.config';
-import {
   ConfigValidationError,
   parsePaymentKitPublicConfig,
 } from '@common/errors/config-validation.error';
+import {
+  validatePaymentKitPublicConfig,
+  type PaymentKitPublicConfig,
+} from '@config/paymentKit.config';
 
 describe('PaymentKit global configuration', () => {
   const validConfig: PaymentKitPublicConfig = {

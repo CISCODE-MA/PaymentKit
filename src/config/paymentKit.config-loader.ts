@@ -1,26 +1,24 @@
 import {
-  type PaymentKitEnvironment,
-  type PaymentKitPublicConfig,
-  type ConfigValidationIssue,
-} from './paymentKit.config';
-import {
   ConfigValidationError,
   parsePaymentKitPublicConfig,
 } from '../common/errors/config-validation.error';
-
-import {
-  buildStripeInternalConfig,
-  type StripeInternalConfig,
-  type EnvSource as StripeEnvSource,
-} from './gateways/stripe.config';
+import type { WebhookMode } from '../common/types/webhook.types';
 
 import {
   buildPaypalInternalConfig,
   type PaypalInternalConfig,
   type EnvSource as PaypalEnvSource,
 } from './gateways/paypal.config';
-
-import type { WebhookMode } from '../common/types/webhook.types';
+import {
+  buildStripeInternalConfig,
+  type StripeInternalConfig,
+  type EnvSource as StripeEnvSource,
+} from './gateways/stripe.config';
+import {
+  type PaymentKitEnvironment,
+  type PaymentKitPublicConfig,
+  type ConfigValidationIssue,
+} from './paymentKit.config';
 
 export interface PaymentKitResolvedGateways {
   stripe?: StripeInternalConfig;

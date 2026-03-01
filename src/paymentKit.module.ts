@@ -1,40 +1,37 @@
-import { DynamicModule, Module } from '@nestjs/common';
 import { PAYMENTKIT_CONFIG } from '@common/constants';
 import type { PaymentKitPublicConfig } from '@config/paymentKit.config';
 import { PaymentKitConfigLoader } from '@config/paymentKit.config-loader';
-
-import { InternalWebhookController } from './nest/controllers/internal-webhook.controller';
-
+import { DynamicModule, Module } from '@nestjs/common';
+import { PaypalPaymentsClient } from '@src/core/gateways/paypal/paypal-payments.client';
+import { PaypalWebhookHandler } from '@src/core/gateways/paypal/paypal-webhook.handler';
+import { PaypalClient } from '@src/core/gateways/paypal/paypal.client';
+import { PaypalGateway } from '@src/core/gateways/paypal/paypal.gateway';
+import { StripePaymentsClient } from '@src/core/gateways/stripe/stripe-payments.client';
+import { StripeWebhookHandler } from '@src/core/gateways/stripe/stripe-webhook.handler';
+import { StripeClient } from '@src/core/gateways/stripe/stripe.client';
+import { StripeGateway } from '@src/core/gateways/stripe/stripe.gateway';
+import type { PaymentGateway } from '@src/core/ports/payment-gateway.port';
+import {
+  DefaultErrorNormalizer,
+  type ErrorNormalizer,
+} from '@src/core/services/error-normalizer.service';
+import {
+  InMemoryGatewayRegistry,
+  type GatewayRegistry,
+} from '@src/core/services/gateway-registry.service';
+import { DefaultPaymentEngine } from '@src/core/services/payment-engine.service';
 import {
   InMemoryWebhookEventDispatcher,
   type WebhookEventDispatcher,
 } from '@src/core/services/webhook-event-dispatcher.service';
 import { WebhookGatewayRouter } from '@src/core/services/webhook-gateway-router.service';
-
-import {
-  InMemoryGatewayRegistry,
-  type GatewayRegistry,
-} from '@src/core/services/gateway-registry.service';
-import {
-  DefaultErrorNormalizer,
-  type ErrorNormalizer,
-} from '@src/core/services/error-normalizer.service';
-import { DefaultPaymentEngine } from '@src/core/services/payment-engine.service';
-
 import { PaymentsService } from '@src/nest/services/payments.service';
-import type { PaymentGateway } from './core/ports/payment-gateway.port';
 
 // Stripe stack
-import { StripeClient } from '@src/core/gateways/stripe/stripe.client';
-import { StripePaymentsClient } from '@src/core/gateways/stripe/stripe-payments.client';
-import { StripeGateway } from '@src/core/gateways/stripe/stripe.gateway';
-import { StripeWebhookHandler } from '@src/core/gateways/stripe/stripe-webhook.handler';
 
 // PayPal stack
-import { PaypalClient } from '@src/core/gateways/paypal/paypal.client';
-import { PaypalPaymentsClient } from '@src/core/gateways/paypal/paypal-payments.client';
-import { PaypalGateway } from '@src/core/gateways/paypal/paypal.gateway';
-import { PaypalWebhookHandler } from '@src/core/gateways/paypal/paypal-webhook.handler';
+
+import { InternalWebhookController } from './nest/controllers/internal-webhook.controller';
 
 @Module({})
 export class PaymentKitModule {

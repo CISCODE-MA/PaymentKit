@@ -1,5 +1,5 @@
-import type { GatewayKey } from '@common/types/gateway.types';
 import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
+import type { GatewayKey } from '@common/types/gateway.types';
 
 describe('NormalizedError model', () => {
   it('represents a normalized error shape', () => {

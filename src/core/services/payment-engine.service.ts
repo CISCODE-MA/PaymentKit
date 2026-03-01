@@ -1,5 +1,8 @@
 // src/core/services/payment-engine.service.ts
 
+import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
+import type { GatewayKey } from '@common/types/gateway.types';
+import type { PaymentEngine } from '@core/ports/payment-engine.port';
 import type {
   CreatePaymentCommand,
   CreatePaymentResult,
@@ -9,11 +12,8 @@ import type {
   RefundPaymentResult,
   PaymentGateway,
 } from '@core/ports/payment-gateway.port';
-import type { PaymentEngine } from '@core/ports/payment-engine.port';
-import type { GatewayRegistry } from '@src/core/services/gateway-registry.service';
 import type { ErrorNormalizer } from '@src/core/services/error-normalizer.service';
-import type { GatewayKey } from '@common/types/gateway.types';
-import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
+import type { GatewayRegistry } from '@src/core/services/gateway-registry.service';
 
 /**
  * Default engine orchestrating calls to underlying gateways.

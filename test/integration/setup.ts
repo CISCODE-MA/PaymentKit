@@ -4,9 +4,10 @@
  * Configures test environment for integration tests with real gateway sandboxes.
  */
 
-import { Test, TestingModule } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import type { PaymentsService } from '@src/nest/services/payments.service';
 import { PaymentKitModule } from '@src/paymentKit.module';
-import { PaymentsService } from '@src/nest/services/payments.service';
 
 /**
  * Note: For integration tests, set environment variables directly or use a .env.test file

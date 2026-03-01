@@ -1,5 +1,5 @@
-import { mapPaypalErrorToNormalizedError } from '@src/core/gateways/paypal/paypal-error.mapper';
 import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import { mapPaypalErrorToNormalizedError } from '@src/core/gateways/paypal/paypal-error.mapper';
 
 describe('mapPaypalErrorToNormalizedError', () => {
   it('maps validation error (400) to InvalidRequest', () => {

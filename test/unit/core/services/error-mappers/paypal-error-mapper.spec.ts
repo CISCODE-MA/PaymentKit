@@ -1,7 +1,7 @@
 // test/unit/core/services/paypal-error-mapper.spec.ts
 
-import { PaypalErrorMapper } from '@src/core/services/error-mapping/paypal-error-mapper';
 import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
+import { PaypalErrorMapper } from '@src/core/services/error-mapping/paypal-error-mapper';
 
 describe('PaypalErrorMapper', () => {
   it('maps VALIDATION_ERROR to InvalidRequest', () => {

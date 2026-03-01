@@ -1,5 +1,5 @@
-import { StripeErrorMapper } from '@src/core/services/error-mapping/stripe-error-mapper';
 import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
+import { StripeErrorMapper } from '@src/core/services/error-mapping/stripe-error-mapper';
 
 describe('StripeErrorMapper', () => {
   it('maps card_declined to CardDeclined', () => {

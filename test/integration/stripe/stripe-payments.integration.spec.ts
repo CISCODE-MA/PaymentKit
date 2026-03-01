@@ -4,9 +4,10 @@
  * Tests payment operations against Stripe sandbox API.
  */
 
-import { TestingModule } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import type { CreatePaymentCommand } from '@src/core/ports/payment-gateway.port';
 import { PaymentsService } from '@src/nest/services/payments.service';
-import { CreatePaymentCommand } from '@src/core/ports/payment-gateway.port';
+
 import {
   createTestModule,
   validateTestEnvironment,

@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
+    "module": "commonjs",
     "strict": true,
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -45,9 +44,8 @@
     }
   },
   "include": [
-    "src",
-    "test",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",

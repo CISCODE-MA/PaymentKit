@@ -1,11 +1,11 @@
+import type { GatewayKey } from '@common/types/gateway.types';
+import type { WebhookEvent } from '@common/types/webhook.types';
+import type { WebhookEventDispatcher } from '@src/core/services/webhook-event-dispatcher.service';
 import {
   WebhookGatewayRouter,
   type GatewayWebhookHandler,
   type IncomingWebhookContext,
 } from '@src/core/services/webhook-gateway-router.service';
-import type { WebhookEvent } from '@common/types/webhook.types';
-import type { GatewayKey } from '@common/types/gateway.types';
-import type { WebhookEventDispatcher } from '@src/core/services/webhook-event-dispatcher.service';
 
 const makeEvent = (type = 'payment.succeeded'): WebhookEvent => ({
   type,

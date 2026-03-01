@@ -1,4 +1,17 @@
 import {
+  NormalizedErrorCode,
+  type NormalizedError,
+} from '@src/common/errors/normalized-error.model';
+import { PaymentStatus } from '@src/core/entities/payment-status.enum';
+import type { Payment } from '@src/core/entities/payment.entity';
+import type { Refund } from '@src/core/entities/refund.entity';
+import type {
+  PaypalPaymentsClient,
+  CreatePaypalPaymentInput,
+  GetPaypalPaymentStatusInput,
+  RefundPaypalPaymentInput,
+} from '@src/core/gateways/paypal/paypal-payments.client';
+import {
   type CreatePaymentCommand,
   type CreatePaymentResult,
   type GetPaymentStatusQuery,
@@ -7,20 +20,7 @@ import {
   type RefundPaymentCommand,
   type RefundPaymentResult,
 } from '@src/core/ports/payment-gateway.port';
-import { PaymentStatus } from '@src/core/entities/payment-status.enum';
-import type { Payment } from '@src/core/entities/payment.entity';
-import type { Refund } from '@src/core/entities/refund.entity';
 import type { Money } from '@src/core/value-objects/money.value-object';
-import {
-  NormalizedErrorCode,
-  type NormalizedError,
-} from '@src/common/errors/normalized-error.model';
-import {
-  PaypalPaymentsClient,
-  type CreatePaypalPaymentInput,
-  type GetPaypalPaymentStatusInput,
-  type RefundPaypalPaymentInput,
-} from '@src/core/gateways/paypal/paypal-payments.client';
 
 /**
  * Concrete PaymentGateway implementation for PayPal.
