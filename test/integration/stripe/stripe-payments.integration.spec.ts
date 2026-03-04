@@ -15,18 +15,32 @@ import {
   cleanupTestPayment,
 } from '../setup';
 
-describe('Stripe Payments Integration', () => {
+const REQUIRED_ENV = [
+  'PAYMENTKIT_ENVIRONMENT',
+  'PAYMENTKIT_STRIPE_SECRET_KEY',
+  'PAYMENTKIT_PAYPAL_CLIENT_ID',
+  'PAYMENTKIT_PAYPAL_SECRET',
+];
+const HAS_REQUIRED_ENV = REQUIRED_ENV.every((key) => Boolean(process.env[key]));
+const describeIntegration = HAS_REQUIRED_ENV ? describe : describe.skip;
+
+describeIntegration('Stripe Payments Integration', () => {
   let module: TestingModule;
   let paymentsService: PaymentsService;
 
   beforeAll(async () => {
+    if (!HAS_REQUIRED_ENV) {
+      return;
+    }
     validateTestEnvironment();
     module = await createTestModule();
     paymentsService = module.get<PaymentsService>(PaymentsService);
   });
 
   afterAll(async () => {
-    await module.close();
+    if (module) {
+      await module.close();
+    }
   });
 
   describe('createPayment', () => {
