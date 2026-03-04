@@ -1,4 +1,4 @@
-import { GatewayKey } from '../types/gateway.types';
+import type { GatewayKey } from '../types/gateway.types';
 
 /**
  * High-level normalized error codes exposed by PaymentKit.

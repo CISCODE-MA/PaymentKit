@@ -1,0 +1,83 @@
+name: CI - Release Check
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      sonar:
+        description: "Run SonarCloud analysis"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+concurrency:
+  group: ci-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: release checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    # Config stays in the workflow file (token stays in repo secrets)
+    env:
+      SONAR_HOST_URL: "https://sonarcloud.io"
+      SONAR_ORGANIZATION: "ciscode"
+      SONAR_PROJECT_KEY: "CISCODE-MA_PaymentKit"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install
+        run: npm ci
+
+      - name: Format
+        run: npm run format
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test (with coverage)
+        run: npm run test:cov
+
+      - name: Build
+        run: npm run build
+
+      - name: SonarCloud Scan
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.sonar == 'true' }}
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.organization=${{ env.SONAR_ORGANIZATION }} \
+            -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} \
+            -Dsonar.sources=src \
+            -Dsonar.tests=test \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+      - name: SonarCloud Quality Gate
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.sonar == 'true' }}
+        uses: SonarSource/sonarqube-quality-gate-action@v1
+        timeout-minutes: 10
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}

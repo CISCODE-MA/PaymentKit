@@ -1,3 +1,17 @@
+import {
+  NormalizedErrorCode,
+  type NormalizedError,
+} from '@src/common/errors/normalized-error.model';
+import type { GatewayKey } from '@src/common/types/gateway.types';
+import { PaymentStatus } from '@src/core/entities/payment-status.enum';
+import type { Payment } from '@src/core/entities/payment.entity';
+import type { Refund } from '@src/core/entities/refund.entity';
+import type {
+  StripePaymentsClient,
+  CreateStripePaymentInput,
+  GetStripePaymentStatusInput,
+  RefundStripePaymentInput,
+} from '@src/core/gateways/stripe/stripe-payments.client';
 import type {
   PaymentGateway,
   CreatePaymentCommand,
@@ -7,21 +21,7 @@ import type {
   RefundPaymentCommand,
   RefundPaymentResult,
 } from '@src/core/ports/payment-gateway.port';
-import type { GatewayKey } from '@src/common/types/gateway.types';
-import { PaymentStatus } from '@src/core/entities/payment-status.enum';
-import type { Payment } from '@src/core/entities/payment.entity';
-import type { Refund } from '@src/core/entities/refund.entity';
 import type { Money } from '@src/core/value-objects/money.value-object';
-import type {
-  StripePaymentsClient,
-  CreateStripePaymentInput,
-  GetStripePaymentStatusInput,
-  RefundStripePaymentInput,
-} from '@src/core/gateways/stripe/stripe-payments.client';
-import {
-  NormalizedErrorCode,
-  type NormalizedError,
-} from '@src/common/errors/normalized-error.model';
 
 const STRIPE_GATEWAY_KEY: GatewayKey = 'stripe';
 

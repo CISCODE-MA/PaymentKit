@@ -1,11 +1,11 @@
+import type { GatewayKey } from '@common/types/gateway.types';
+import type { WebhookEvent } from '@common/types/webhook.types';
+import type { WebhookEventDispatcher } from '@src/core/services/webhook-event-dispatcher.service';
 import {
   WebhookGatewayRouter,
   type GatewayWebhookHandler,
   type IncomingWebhookContext,
 } from '@src/core/services/webhook-gateway-router.service';
-import type { GatewayKey } from '@common/types/gateway.types';
-import type { WebhookEvent } from '@common/types/webhook.types';
-import type { WebhookEventDispatcher } from '@src/core/services/webhook-event-dispatcher.service';
 
 class FakeDispatcher implements WebhookEventDispatcher {
   public readonly emitted: WebhookEvent[] = [];
@@ -79,7 +79,7 @@ describe('WebhookGatewayRouter', () => {
 
     await expect(
       router.route({
-        gateway: 'adyen',
+        gateway: 'stripe',
         body: { test: true },
         headers: {},
       }),

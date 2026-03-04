@@ -1,5 +1,5 @@
-import { GatewayKey } from '@src/common/types/gateway.types';
-import { WebhookEvent } from '@src/common/types/webhook.types';
+import type { GatewayKey } from '@src/common/types/gateway.types';
+import type { WebhookEvent } from '@src/common/types/webhook.types';
 
 const STRIPE_GATEWAY_KEY: GatewayKey = 'stripe';
 

@@ -1,6 +1,6 @@
-import { StripeClient, type StripeHttpRequest } from '@src/core/gateways/stripe/stripe.client';
-import { mapStripeErrorToNormalizedError } from '@src/core/gateways/stripe/stripe-error.mapper';
 import type { NormalizedError } from '@src/common/errors/normalized-error.model';
+import { mapStripeErrorToNormalizedError } from '@src/core/gateways/stripe/stripe-error.mapper';
+import type { StripeClient, StripeHttpRequest } from '@src/core/gateways/stripe/stripe.client';
 
 interface StripePaymentIntentResponse {
   id: string;

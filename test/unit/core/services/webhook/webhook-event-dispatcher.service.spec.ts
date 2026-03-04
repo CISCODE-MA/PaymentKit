@@ -1,8 +1,8 @@
+import type { WebhookEvent } from '@src/common/types/webhook.types';
 import {
   InMemoryWebhookEventDispatcher,
   type WebhookEventDispatcher,
 } from '@src/core/services/webhook-event-dispatcher.service';
-import type { WebhookEvent } from '@src/common/types/webhook.types';
 
 describe('InMemoryWebhookEventDispatcher', () => {
   const makeEvent = (overrides: Partial<WebhookEvent> = {}): WebhookEvent => ({

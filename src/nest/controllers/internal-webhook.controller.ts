@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, Headers, HttpCode, Post } from '@nestjs/common';
 import type { GatewayKey } from '@common/types/gateway.types';
+import { BadRequestException, Body, Controller, Headers, HttpCode, Post } from '@nestjs/common';
 import { WebhookGatewayRouter } from '@src/core/services/webhook-gateway-router.service';
 
 /**
@@ -39,7 +39,7 @@ export class InternalWebhookController {
 
     const value = Array.isArray(raw) ? raw[0] : raw;
 
-    if (value !== 'stripe' && value !== 'paypal' && value !== 'adyen') {
+    if (value !== 'stripe' && value !== 'paypal') {
       return undefined;
     }
 

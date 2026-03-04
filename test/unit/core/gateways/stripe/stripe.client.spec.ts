@@ -1,11 +1,11 @@
 // test/unit/core/gateways/stripe.client.spec.ts
+import type { StripeInternalConfig } from '@config/gateways/stripe.config';
 import {
   StripeClient,
   type StripeHttpRequest,
   type StripeHttpResponse,
   type StripeHttpClient,
 } from '@src/core/gateways/stripe/stripe.client';
-import type { StripeInternalConfig } from '@config/gateways/stripe.config';
 
 class FakeHttpClient {
   public readonly requests: StripeHttpRequest[] = [];

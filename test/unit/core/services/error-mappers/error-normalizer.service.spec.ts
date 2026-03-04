@@ -1,5 +1,5 @@
-import { DefaultErrorNormalizer } from '@src/core/services/error-normalizer.service';
 import { NormalizedErrorCode, type NormalizedError } from '@common/errors/normalized-error.model';
+import { DefaultErrorNormalizer } from '@src/core/services/error-normalizer.service';
 
 describe('DefaultErrorNormalizer', () => {
   const normalizer = new DefaultErrorNormalizer();
@@ -31,19 +31,6 @@ describe('DefaultErrorNormalizer', () => {
 
     expect(normalized.gateway).toBe('paypal');
     expect(normalized.code).toBe(NormalizedErrorCode.InvalidRequest);
-  });
-
-  it('delegates to Adyen mapper', () => {
-    const error = {
-      errorCode: '14_003',
-      message: 'Refused',
-      status: 402,
-    };
-
-    const normalized = normalizer.normalize(error, { gateway: 'adyen' });
-
-    expect(normalized.gateway).toBe('adyen');
-    expect(normalized.code).toBe(NormalizedErrorCode.CardDeclined);
   });
 
   it('returns Unknown for unknown gateway keys', () => {

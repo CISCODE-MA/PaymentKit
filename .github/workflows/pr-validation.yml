@@ -2,29 +2,37 @@ name: CI - PR Validation
 
 on:
   pull_request:
-    branches:
-      - develop
+    branches: [develop]
+
+permissions:
+  contents: read
 
 jobs:
-  pr-validation:
-    name: pr-validation
+  validate:
+    name: CI - PR Validation
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Install
         run: npm ci
+
+      - name: Format (check)
+        run: npm run format
 
       - name: Lint
         run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Test
         run: npm test

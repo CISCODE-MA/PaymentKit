@@ -1,5 +1,6 @@
-import { GatewayKey } from '@src/common/types/gateway.types';
-import { PaymentGateway } from '../ports/payment-gateway.port';
+import type { GatewayKey } from '@src/common/types/gateway.types';
+
+import type { PaymentGateway } from '../ports/payment-gateway.port';
 
 /**
  * Abstraction for a registry that stores gateway implementations.

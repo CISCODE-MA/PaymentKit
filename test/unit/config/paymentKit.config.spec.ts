@@ -1,11 +1,11 @@
 import {
-  validatePaymentKitPublicConfig,
-  type PaymentKitPublicConfig,
-} from '@config/paymentKit.config';
-import {
   ConfigValidationError,
   parsePaymentKitPublicConfig,
 } from '@common/errors/config-validation.error';
+import {
+  validatePaymentKitPublicConfig,
+  type PaymentKitPublicConfig,
+} from '@config/paymentKit.config';
 
 describe('PaymentKit global configuration', () => {
   const validConfig: PaymentKitPublicConfig = {
@@ -14,7 +14,6 @@ describe('PaymentKit global configuration', () => {
     gateways: {
       stripe: { enabled: true },
       paypal: { enabled: false },
-      adyen: { enabled: false },
     },
   };
 

@@ -1,7 +1,7 @@
-import { Test } from '@nestjs/testing';
-import { PaymentKitModule } from '@src/paymentKit.module';
 import { PAYMENTKIT_CONFIG } from '@common/constants';
 import type { PaymentKitResolvedConfig } from '@config/paymentKit.config-loader';
+import { Test } from '@nestjs/testing';
+import { PaymentKitModule } from '@src/paymentKit.module';
 
 describe('PaymentKitModule.register', () => {
   const ORIGINAL_ENV = { ...process.env };
@@ -25,7 +25,6 @@ describe('PaymentKitModule.register', () => {
           gateways: {
             stripe: { enabled: true },
             paypal: { enabled: false },
-            adyen: { enabled: false },
           },
         }),
       ],

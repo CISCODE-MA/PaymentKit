@@ -1,4 +1,5 @@
-import { NormalizedError, NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import type { NormalizedError } from '@src/common/errors/normalized-error.model';
+import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
 
 interface PaypalErrorDetail {
   issue?: string;

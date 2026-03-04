@@ -1,4 +1,4 @@
-import { StripeInternalConfig } from '@src/config/gateways/stripe.config';
+import type { StripeInternalConfig } from '@src/config/gateways/stripe.config';
 
 export interface StripeHttpRequest {
   method: 'GET' | 'POST' | 'DELETE';

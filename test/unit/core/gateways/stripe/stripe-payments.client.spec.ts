@@ -1,15 +1,15 @@
+import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
 import {
   StripePaymentsClient,
   type CreateStripePaymentInput,
   type GetStripePaymentStatusInput,
   type RefundStripePaymentInput,
 } from '@src/core/gateways/stripe/stripe-payments.client';
-import {
-  type StripeHttpRequest,
-  type StripeHttpResponse,
+import type {
   StripeClient,
+  StripeHttpRequest,
+  StripeHttpResponse,
 } from '@src/core/gateways/stripe/stripe.client';
-import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
 
 class FakeStripeClient {
   public readonly requests: StripeHttpRequest[] = [];

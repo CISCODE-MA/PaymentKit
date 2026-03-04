@@ -3,7 +3,7 @@
  * Concrete gateways and t he Nest layer talk to this.
  */
 
-import {
+import type {
   CreatePaymentCommand,
   CreatePaymentResult,
   GetPaymentStatusQuery,

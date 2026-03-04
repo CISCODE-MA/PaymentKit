@@ -1,5 +1,5 @@
-import { WebhookMode } from '@src/common/types/webhook.types';
-import { PaymentKitResolvedConfig } from '@src/config/paymentKit.config-loader';
+import type { WebhookMode } from '@src/common/types/webhook.types';
+import type { PaymentKitResolvedConfig } from '@src/config/paymentKit.config-loader';
 
 /**
  * Read-only helper aruond the resolved config's webhook mode.

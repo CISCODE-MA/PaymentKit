@@ -1,0 +1,60 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate tag exists on this push
+        run: |
+          TAG=$(git describe --exact-match --tags HEAD 2>/dev/null || echo "")
+          if [[ -z "$TAG" ]]; then
+            echo "❌ No tag found on HEAD. This push did not include a version tag."
+            echo "To publish, merge to master with a tag: git tag v1.0.0 && git push origin master --tags"
+            exit 1
+          fi
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "❌ Invalid tag format: $TAG. Expected: v*.*.*"
+            exit 1
+          fi
+          echo "✅ Valid tag found: $TAG"
+          echo "TAG_VERSION=$TAG" >> $GITHUB_ENV
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Lint
+        run: npm run lint --if-present 2>/dev/null || true
+
+      - name: Test
+        run: npm test --if-present 2>/dev/null || true
+
+      - name: Publish to NPM
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,8 +1,8 @@
-import type { Money } from '@src/core/value-objects/money.value-object';
+import type { GatewayKey } from '@common/types/gateway.types';
 import { PaymentStatus } from '@src/core/entities/payment-status.enum';
 import type { Payment } from '@src/core/entities/payment.entity';
 import type { Refund } from '@src/core/entities/refund.entity';
-import type { GatewayKey } from '@common/types/gateway.types';
+import type { Money } from '@src/core/value-objects/money.value-object';
 
 describe('Payment and Refund entities', () => {
   const gateway: GatewayKey = 'stripe';

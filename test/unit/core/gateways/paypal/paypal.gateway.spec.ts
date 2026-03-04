@@ -1,12 +1,12 @@
-import { PaypalGateway } from '@src/core/gateways/paypal/paypal.gateway';
-import {
-  type CreatePaypalPaymentResult,
-  type GetPaypalPaymentStatusResult,
-  type RefundPaypalPaymentResult,
-  PaypalPaymentsClient,
-} from '@src/core/gateways/paypal/paypal-payments.client';
-import { PaymentStatus } from '@src/core/entities/payment-status.enum';
 import { NormalizedErrorCode } from '@src/common/errors/normalized-error.model';
+import { PaymentStatus } from '@src/core/entities/payment-status.enum';
+import type {
+  PaypalPaymentsClient,
+  CreatePaypalPaymentResult,
+  GetPaypalPaymentStatusResult,
+  RefundPaypalPaymentResult,
+} from '@src/core/gateways/paypal/paypal-payments.client';
+import { PaypalGateway } from '@src/core/gateways/paypal/paypal.gateway';
 import type {
   CreatePaymentCommand,
   GetPaymentStatusQuery,

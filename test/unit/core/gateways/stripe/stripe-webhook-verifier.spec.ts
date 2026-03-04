@@ -1,5 +1,6 @@
-import { verifyStripeWebhook } from '@src/core/gateways/stripe/stripe-webhook-verifier';
 import { createHmac } from 'crypto';
+
+import { verifyStripeWebhook } from '@src/core/gateways/stripe/stripe-webhook-verifier';
 
 describe('verifyStripeWebhook', () => {
   const secret = 'whsec_test_secret';

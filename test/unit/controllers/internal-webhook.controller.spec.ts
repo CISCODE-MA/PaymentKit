@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
-import { InternalWebhookController } from '@src/nest/controllers/internal-webhook.controller';
 import type { WebhookGatewayRouter } from '@src/core/services/webhook-gateway-router.service';
+import { InternalWebhookController } from '@src/nest/controllers/internal-webhook.controller';
 
 class FakeRouter implements WebhookGatewayRouter {
   public readonly routes: Array<{
