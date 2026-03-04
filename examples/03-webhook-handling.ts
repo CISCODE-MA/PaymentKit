@@ -227,7 +227,7 @@ export class WebhookHandlerService {
  */
 @Controller('webhooks')
 export class WebhookController {
-  constructor(private readonly handler: WebhookHandlerService) {}
+  constructor(private readonly handler: WebhookHandlerService) { }
 
   /**
    * Stripe webhook endpoint

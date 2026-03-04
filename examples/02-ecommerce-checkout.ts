@@ -37,7 +37,7 @@ interface Order {
 
 @Injectable()
 export class EcommerceCheckoutService {
-  constructor(private readonly payments: PaymentsService) {}
+  constructor(private readonly payments: PaymentsService) { }
 
   /**
    * Complete checkout flow

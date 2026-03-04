@@ -19,7 +19,7 @@ interface RefundRecord {
 
 @Injectable()
 export class RefundOperationsService {
-  constructor(private readonly payments: PaymentsService) {}
+  constructor(private readonly payments: PaymentsService) { }
 
   /**
    * Example 1: Full refund
@@ -230,11 +230,11 @@ export class RefundOperationsService {
       try {
         const result = refund.amount
           ? await this.processPartialRefund(
-              refund.gateway,
-              refund.paymentId,
-              refund.amount,
-              refund.reason,
-            )
+            refund.gateway,
+            refund.paymentId,
+            refund.amount,
+            refund.reason,
+          )
           : await this.processFullRefund(refund.gateway, refund.paymentId, refund.reason);
 
         successful.push(result);
@@ -284,9 +284,9 @@ export class RefundOperationsService {
           paymentId,
           amount: amount
             ? {
-                currency: statusResult.payment.amount.currency,
-                amount,
-              }
+              currency: statusResult.payment.amount.currency,
+              amount,
+            }
             : undefined,
           reason: reason || 'Refund',
           idempotencyKey: `refund_${paymentId}_attempt_${attempt}`,
@@ -310,9 +310,9 @@ export class RefundOperationsService {
           paymentId,
           amount: amount
             ? {
-                currency: statusResult.payment.amount.currency,
-                amount,
-              }
+              currency: statusResult.payment.amount.currency,
+              amount,
+            }
             : statusResult.payment.amount,
           reason: reason || 'Refund',
           status: 'completed',
