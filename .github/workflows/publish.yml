@@ -20,19 +20,52 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate tag exists on this push
+      - name: Validate version tag and package.json
         run: |
-          TAG=$(git describe --exact-match --tags HEAD 2>/dev/null || echo "")
+          # Since develop→master may be a squash merge, look for the latest version tag anywhere in the repo
+          # This handles both regular merges and squash merges
+          TAG=$(git tag --list --sort=-version:refname 'v*.*.*' | head -1 || echo "")
+
           if [[ -z "$TAG" ]]; then
-            echo "❌ No tag found on HEAD. This push did not include a version tag."
-            echo "To publish, merge to master with a tag: git tag v1.0.0 && git push origin master --tags"
+            echo "❌ ERROR: No version tag found!"
+            echo ""
+            echo "This typically happens when:"
+            echo "  1. You forgot to run 'npm version patch|minor|major' on develop"
+            echo "  2. You didn't push tags: git push origin develop --tags"
+            echo "  3. Tags weren't pushed to GitHub before merge"
+            echo ""
+            echo "📋 Correct workflow:"
+            echo "  1. On develop: npm version patch (or minor/major)"
+            echo "  2. On develop: git push origin develop --tags"
+            echo "  3. Create PR develop→master and merge (can be squash merge)"
+            echo "  4. Workflow automatically triggers on master with the tag"
+            echo ""
             exit 1
           fi
+
+          # Validate tag format
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "❌ Invalid tag format: $TAG. Expected: v*.*.*"
+            echo "❌ ERROR: Invalid tag format: '$TAG'"
+            echo "Expected format: v*.*.*  (e.g., v1.0.0, v0.2.3)"
             exit 1
           fi
+
+          # Extract version from tag
+          TAG_VERSION="${TAG#v}"  # Remove 'v' prefix
+          PKG_VERSION=$(grep '"version"' package.json | head -1 | sed 's/.*"version": "\([^"]*\)".*/\1/')
+
+          # Verify package.json version matches tag
+          if [[ "$TAG_VERSION" != "$PKG_VERSION" ]]; then
+            echo "❌ ERROR: Version mismatch!"
+            echo "  Tag version:       $TAG_VERSION"
+            echo "  package.json:      $PKG_VERSION"
+            echo ""
+            echo "Fix: Make sure you ran 'npm version' before pushing"
+            exit 1
+          fi
+
           echo "✅ Valid tag found: $TAG"
+          echo "✅ Version matches package.json: $PKG_VERSION"
           echo "TAG_VERSION=$TAG" >> $GITHUB_ENV
 
       - name: Setup Node.js

@@ -243,4 +243,132 @@ describe('StripeGateway', () => {
     expect(result.refund).toBeNull();
     expect(result.error?.code).toBe(NormalizedErrorCode.InternalError);
   });
+
+  describe('status mapping', () => {
+    const testStatusMapping = (stripeStatus: string, expectedPaymentStatus: PaymentStatus) => {
+      it(`maps Stripe status '${stripeStatus}' to '${expectedPaymentStatus}'`, async () => {
+        const fake = new FakeStripePaymentsClient();
+        fake.statusResponses.push({
+          ok: true,
+          paymentIntentId: 'pi_test',
+          status: stripeStatus,
+          raw: {},
+        });
+
+        const gateway = new StripeGateway(fake);
+        const result = await gateway.getPaymentStatus({
+          gateway: 'stripe',
+          gatewayPaymentId: 'pi_test',
+        });
+
+        expect(result.status).toBe(expectedPaymentStatus);
+      });
+    };
+
+    testStatusMapping('requires_payment_method', PaymentStatus.Pending);
+    testStatusMapping('requires_confirmation', PaymentStatus.Pending);
+    testStatusMapping('requires_action', PaymentStatus.Pending);
+    testStatusMapping('processing', PaymentStatus.Pending);
+    testStatusMapping('requires_capture', PaymentStatus.Authorized);
+    testStatusMapping('succeeded', PaymentStatus.Captured);
+    testStatusMapping('canceled', PaymentStatus.Canceled);
+    testStatusMapping('unknown_status', PaymentStatus.Failed);
+    testStatusMapping('', PaymentStatus.Failed);
+  });
+
+  describe('createPayment with client secret', () => {
+    it('includes nextAction with clientSecret when present', async () => {
+      const fake = new FakeStripePaymentsClient();
+      fake.createResponses.push({
+        ok: true,
+        paymentIntentId: 'pi_789',
+        status: 'requires_action',
+        raw: { client_secret: 'pi_789_secret' },
+      });
+
+      const gateway = new StripeGateway(fake);
+      const result = await gateway.createPayment({
+        gateway: 'stripe',
+        amount: makeMoney(2000),
+      });
+
+      expect(result.nextAction?.type).toBe('client_secret');
+      expect((result.nextAction as any)?.clientSecret).toBe('pi_789_secret');
+    });
+
+    it('includes nextAction as none when clientSecret is missing', async () => {
+      const fake = new FakeStripePaymentsClient();
+      fake.createResponses.push({
+        ok: true,
+        paymentIntentId: 'pi_789',
+        status: 'succeeded',
+        raw: {},
+      });
+
+      const gateway = new StripeGateway(fake);
+      const result = await gateway.createPayment({
+        gateway: 'stripe',
+        amount: makeMoney(2000),
+      });
+
+      expect(result.nextAction?.type).toBe('none');
+    });
+
+    it('includes nextAction as none when clientSecret is not a string', async () => {
+      const fake = new FakeStripePaymentsClient();
+      fake.createResponses.push({
+        ok: true,
+        paymentIntentId: 'pi_789',
+        status: 'processing',
+        raw: { client_secret: 123 },
+      });
+
+      const gateway = new StripeGateway(fake);
+      const result = await gateway.createPayment({
+        gateway: 'stripe',
+        amount: makeMoney(2000),
+      });
+
+      expect(result.nextAction?.type).toBe('none');
+    });
+  });
+
+  describe('getPaymentStatus uses paymentId fallback', () => {
+    it('uses gatewayPaymentId when available', async () => {
+      const fake = new FakeStripePaymentsClient();
+      fake.statusResponses.push({
+        ok: true,
+        paymentIntentId: 'pi_gateway_id',
+        status: 'succeeded',
+        raw: {},
+      });
+
+      const gateway = new StripeGateway(fake);
+      await gateway.getPaymentStatus({
+        gateway: 'stripe',
+        gatewayPaymentId: 'pi_gateway_id',
+        paymentId: 'pi_should_be_ignored',
+      });
+
+      expect(fake.statusCalls[0].paymentIntentId).toBe('pi_gateway_id');
+    });
+
+    it('uses paymentId when gatewayPaymentId is not provided', async () => {
+      const fake = new FakeStripePaymentsClient();
+      fake.statusResponses.push({
+        ok: true,
+        paymentIntentId: 'pi_payment_id',
+        status: 'succeeded',
+        raw: {},
+      });
+
+      const gateway = new StripeGateway(fake);
+      await gateway.getPaymentStatus({
+        gateway: 'stripe',
+        paymentId: 'pi_payment_id',
+      });
+
+      expect(fake.statusCalls[0].paymentIntentId).toBe('pi_payment_id');
+    });
+  });
 });
