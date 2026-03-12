@@ -596,6 +596,7 @@ describe('InMemoryGatewayRegistry', () => {
    ```
 
 5. **Webhook Verification Failures**
+
    ```typescript
    it('rejects webhook with invalid signature', async () => {
      const handler = new StripeWebhookHandler('whsec_valid');
@@ -670,6 +671,7 @@ describe('InMemoryGatewayRegistry', () => {
    ```
 
 6. **Special Characters**
+
    ```typescript
    it('handles metadata with special characters', async () => {
      const command = makeCommand({

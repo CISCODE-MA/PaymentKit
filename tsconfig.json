@@ -23,32 +23,14 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@src/*": [
-        "src/*"
-      ],
-      "@core/*": [
-        "src/core/*"
-      ],
-      "@gateways/*": [
-        "src/gateways/*"
-      ],
-      "@common/*": [
-        "src/common/*"
-      ],
-      "@nest/*": [
-        "src/nest/*"
-      ],
-      "@config/*": [
-        "src/config/*"
-      ]
+      "@src/*": ["src/*"],
+      "@core/*": ["src/core/*"],
+      "@gateways/*": ["src/gateways/*"],
+      "@common/*": ["src/common/*"],
+      "@nest/*": ["src/nest/*"],
+      "@config/*": ["src/config/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }

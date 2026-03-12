@@ -6,13 +6,13 @@ on:
   workflow_dispatch:
     inputs:
       sonar:
-        description: "Run SonarCloud analysis"
+        description: 'Run SonarCloud analysis'
         required: true
-        default: "false"
+        default: 'false'
         type: choice
         options:
-          - "false"
-          - "true"
+          - 'false'
+          - 'true'
 
 concurrency:
   group: ci-release-${{ github.ref }}
@@ -26,9 +26,9 @@ jobs:
 
     # Config stays in the workflow file (token stays in repo secrets)
     env:
-      SONAR_HOST_URL: "https://sonarcloud.io"
-      SONAR_ORGANIZATION: "ciscode"
-      SONAR_PROJECT_KEY: "CISCODE-MA_PaymentKit"
+      SONAR_HOST_URL: 'https://sonarcloud.io'
+      SONAR_ORGANIZATION: 'ciscode'
+      SONAR_PROJECT_KEY: 'CISCODE-MA_PaymentKit'
 
     steps:
       - name: Checkout
@@ -39,8 +39,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install
         run: npm ci

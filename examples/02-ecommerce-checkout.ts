@@ -5,9 +5,8 @@
  * and order confirmation.
  */
 
+import { PaymentsService, CreatePaymentCommand, PaymentStatus } from '@ciscode/paymentkit';
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { PaymentsService } from '@ciscode/paymentkit';
-import { CreatePaymentCommand, PaymentStatus } from '@ciscode/paymentkit';
 
 // Example domain entities
 interface Product {
@@ -37,7 +36,7 @@ interface Order {
 
 @Injectable()
 export class EcommerceCheckoutService {
-  constructor(private readonly payments: PaymentsService) { }
+  constructor(private readonly payments: PaymentsService) {}
 
   /**
    * Complete checkout flow
