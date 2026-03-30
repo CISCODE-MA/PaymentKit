@@ -22,56 +22,45 @@ jobs:
 
       - name: Validate version tag and package.json
         run: |
-          # Since develop→master may be a squash merge, look for the latest version tag anywhere in the repo
-          # This handles both regular merges and squash merges
-          TAG=$(git tag --list --sort=-version:refname 'v*.*.*' | head -1 || echo "")
+          PKG_VERSION=$(grep '"version"' package.json | head -1 | sed 's/.*"version": "\([^"]*\)".*/\1/')
+          TAG="v${PKG_VERSION}"
 
-          if [[ -z "$TAG" ]]; then
-            echo "❌ ERROR: No version tag found!"
+          if [[ -z "$PKG_VERSION" ]]; then
+            echo "❌ ERROR: Could not read version from package.json"
+            exit 1
+          fi
+
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "❌ ERROR: Invalid version format in package.json: '$PKG_VERSION'"
+            echo "Expected format: x.y.z  (e.g., 1.0.0, 0.2.3)"
+            exit 1
+          fi
+
+          if ! git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "❌ ERROR: Tag $TAG not found!"
             echo ""
             echo "This typically happens when:"
-            echo "  1. You forgot to run 'npm version patch|minor|major' on develop"
-            echo "  2. You didn't push tags: git push origin develop --tags"
-            echo "  3. Tags weren't pushed to GitHub before merge"
+            echo "  1. You forgot to run 'npm version patch|minor|major' on your feature branch"
+            echo "  2. You didn't push the tag: git push origin <feat/your-feature> --tags"
+            echo "  3. The tag was created locally but never pushed to remote"
             echo ""
             echo "📋 Correct workflow:"
-            echo "  1. On develop: npm version patch (or minor/major)"
-            echo "  2. On develop: git push origin develop --tags"
-            echo "  3. Create PR develop→master and merge (can be squash merge)"
-            echo "  4. Workflow automatically triggers on master with the tag"
+            echo "  1. On feat/** or feature/**: npm version patch (or minor/major)"
+            echo "  2. Push branch + tag: git push origin feat/your-feature --tags"
+            echo "  3. PR feat/** → develop, then PR develop → master"
+            echo "  4. Workflow automatically triggers on master push"
             echo ""
             exit 1
           fi
 
-          # Validate tag format
-          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "❌ ERROR: Invalid tag format: '$TAG'"
-            echo "Expected format: v*.*.*  (e.g., v1.0.0, v0.2.3)"
-            exit 1
-          fi
-
-          # Extract version from tag
-          TAG_VERSION="${TAG#v}"  # Remove 'v' prefix
-          PKG_VERSION=$(grep '"version"' package.json | head -1 | sed 's/.*"version": "\([^"]*\)".*/\1/')
-
-          # Verify package.json version matches tag
-          if [[ "$TAG_VERSION" != "$PKG_VERSION" ]]; then
-            echo "❌ ERROR: Version mismatch!"
-            echo "  Tag version:       $TAG_VERSION"
-            echo "  package.json:      $PKG_VERSION"
-            echo ""
-            echo "Fix: Make sure you ran 'npm version' before pushing"
-            exit 1
-          fi
-
-          echo "✅ Valid tag found: $TAG"
-          echo "✅ Version matches package.json: $PKG_VERSION"
+          echo "✅ package.json version: $PKG_VERSION"
+          echo "✅ Tag $TAG exists in repo"
           echo "TAG_VERSION=$TAG" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
