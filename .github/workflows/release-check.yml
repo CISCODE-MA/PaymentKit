@@ -10,7 +10,6 @@ concurrency:
 
 jobs:
   ci:
-    name: release checks
     runs-on: ubuntu-latest
 
     permissions:
