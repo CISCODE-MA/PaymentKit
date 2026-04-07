@@ -8,35 +8,38 @@ concurrency:
   group: ci-release-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  SONAR_HOST_URL: 'https://sonarcloud.io'
+  SONAR_ORGANIZATION: 'ciscode'
+  SONAR_PROJECT_KEY: 'CISCODE-MA_PaymentKit'
+  NODE_VERSION: '22'
+
+# ─── Job 1: Static checks (fast feedback, runs in parallel with test) ──────────
 jobs:
-  ci:
+  quality:
+    name: Quality Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     permissions:
       contents: read
-      statuses: write
-    timeout-minutes: 25
-
-    # Config stays in the workflow file (token stays in repo secrets)
-    env:
-      SONAR_HOST_URL: 'https://sonarcloud.io'
-      SONAR_ORGANIZATION: 'ciscode'
-      SONAR_PROJECT_KEY: 'CISCODE-MA_PaymentKit'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install
         run: npm ci
+
+      - name: Security Audit
+        # Only fail on high/critical — moderate noise in dev deps is expected
+        run: npm audit --production --audit-level=high
 
       - name: Format
         run: npm run format
@@ -47,11 +50,93 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  # ─── Job 2: Tests + Coverage (artifact passed to Sonar) ────────────────────────
+  test:
+    name: Test & Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
       - name: Test (with coverage)
         run: npm run test:cov
 
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 1
+
+  # ─── Job 3: Build ──────────────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [quality, test]
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
       - name: Build
         run: npm run build
+
+  # ─── Job 4: SonarCloud (depends on test for coverage data) ─────────────────────
+  sonar:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    needs: [test]
+    timeout-minutes: 15
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history required for accurate blame & new code detection
+          fetch-depth: 0
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: sonar-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: sonar-${{ runner.os }}-
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
@@ -64,17 +149,41 @@ jobs:
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
             -Dsonar.sources=src
             -Dsonar.tests=test
+            -Dsonar.test.inclusions=**/*.spec.ts,**/*.test.ts
+            -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/coverage/**,**/*.d.ts
+            -Dsonar.coverage.exclusions=**/*.spec.ts,**/*.test.ts,**/index.ts
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.typescript.tsconfigPath=tsconfig.json
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.qualitygate.timeout=300
 
-      - name: SonarCloud Quality Gate
-        uses: SonarSource/sonarqube-quality-gate-action@v1
-        timeout-minutes: 10
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+  # ─── Job 5: Final status report (always runs) ──────────────────────────────────
+  report:
+    name: Report CI Status
+    runs-on: ubuntu-latest
+    needs: [quality, test, build, sonar]
+    # Run even if upstream jobs failed
+    if: always()
+    timeout-minutes: 5
 
-      - name: Report CI status
-        if: always()
+    permissions:
+      contents: read
+      statuses: write
+
+    steps:
+      - name: Resolve overall result
+        id: result
+        run: |
+          results="${{ needs.quality.result }} ${{ needs.test.result }} ${{ needs.build.result }} ${{ needs.sonar.result }}"
+          if echo "$results" | grep -qE "failure|cancelled"; then
+            echo "state=failure" >> $GITHUB_OUTPUT
+            echo "desc=One or more CI checks failed" >> $GITHUB_OUTPUT
+          else
+            echo "state=success" >> $GITHUB_OUTPUT
+            echo "desc=All CI checks passed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Post commit status
         uses: actions/github-script@v7
         with:
           script: |
@@ -82,6 +191,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
-              state: '${{ job.status }}' === 'success' ? 'success' : 'failure',
-                                                           description: 'CI checks completed'
+              state: '${{ steps.result.outputs.state }}',
+              context: 'CI / Release Check',
+              description: '${{ steps.result.outputs.desc }}',
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             })
