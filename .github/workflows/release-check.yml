@@ -1,8 +1,7 @@
 name: CI - Release Check
 
 on:
-  pull_request:
-    branches: [master]
+  workflow_dispatch: # disabled - migrated to new account
 
 concurrency:
   group: ci-release-${{ github.ref }}
